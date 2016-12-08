@@ -1,1 +1,1 @@
-docker build -t gcc .
+docker build -t gcc-for-arm .

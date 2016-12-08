@@ -1,1 +1,1 @@
-docker run -it -v $PWD/contents:/contents gcc bash
+docker run -it -v $PWD/contents:/contents gcc-for-arm bash
