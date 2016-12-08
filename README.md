@@ -2,6 +2,18 @@
 
 Im trying compile the GCC and G++ to run inside my Android and compile inside my Android the **.c** and **.cpp** files.
 
+## Instructions
+
+> git clone git@github.com:prsolucoes/gcc-for-arm.git  
+> cd gcc-for-arm  
+> ./build.sh  
+> ./run.sh  
+  
+  
+*Obs: You need docker to use it* 
+
+## Issues  
+
 In this repository you have the Dockerfile that try use the Android NDK compiler to do it, but is commented now, because when i try, i got error:
 
 ```
@@ -24,6 +36,6 @@ Im trying solve it now.
 
 Can you help me with it?
 
-Thanks.
-
+## Contact
 Email, skype and hangout: paulo[AT]prsolucoes.com
+
