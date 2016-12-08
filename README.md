@@ -7,10 +7,22 @@ Im trying compile the GCC and G++ to run inside my Android and compile inside my
 > git clone git@github.com:prsolucoes/gcc-for-arm.git  
 > cd gcc-for-arm  
 > ./build.sh  
+
+*Obs: You need docker to use it*
+
+# Test
+
+After build with success, you can execute:
+
 > ./run.sh  
+
+And inside the container, you can run:
+
+> file [path-to-the-new-gcc]
+
+And see if show ARM on file arch
   
-  
-*Obs: You need docker to use it* 
+ *Obs: You need docker to use it*
 
 ## Issues  
 
