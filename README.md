@@ -1,4 +1,4 @@
-# This is a attempt to compile GCC to run on Android (Armv7 and Armv6)
+# This is a attempt to compile GCC to run on Android (ARM)
 
 Im trying compile the GCC and G++ to run inside my Android and compile inside my Android the **.c** and **.cpp** files.
 
