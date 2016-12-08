@@ -57,7 +57,7 @@ RUN ../configure \
 	--target=arm-linux-androideabi \
 	--build=arm-linux-androideabi \
 	--host=arm-linux-androideabi
-	
+
 # build gcc
 RUN make -j"$(nproc)"
 RUN make install
