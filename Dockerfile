@@ -19,7 +19,8 @@ RUN apt-get update && apt-get install -y \
 	 flex \
 	 libmpc-dev \
 	 libcloog-isl-dev \
-	 g++
+	 g++ \
+	 autotools-dev
 
 RUN apt-get clean
 
@@ -45,7 +46,10 @@ ENV NDK_HOME=${BASE_DIR}/android-ndk-r13b
 ENV SYSROOT=${NDK_HOME}/platforms/android-${ANDROID_API}/arch-arm
 ENV CROSS_COMPILER=${NDK_HOME}/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi
 
-# compile gcc
+# download dependencies
+WORKDIR ${BASE_DIR}/gcc-gcc-6_2_0-release
+RUN ./contrib/download_prerequisites
+
 RUN rm -rf ${BASE_DIR}/gcc-gcc-6_2_0-release/build
 RUN mkdir -p ${BASE_DIR}/gcc-gcc-6_2_0-release/build
 WORKDIR ${BASE_DIR}/gcc-gcc-6_2_0-release/build
@@ -54,17 +58,18 @@ WORKDIR ${BASE_DIR}/gcc-gcc-6_2_0-release/build
 RUN ../configure \
 	--host=arm-linux-androideabi \
 	--target=arm-linux-androideabi \
-	--build=arm-linux-androideabi \
+	--build=x86_64-linux-gnu \
 	--disable-option-checking \
  	--disable-multilib \
- 	--disable-bootstrap \	
+ 	--disable-bootstrap \
+	--enable-languages=c,c++ \		
+	CPP=${CROSS_COMPILER}-cpp \
+	AR=${CROSS_COMPILER}-ar \
 	CC=${CROSS_COMPILER}-gcc \
 	CXX=${CROSS_COMPILER}-g++ \
 	CFLAGS="-g -I -O2 -mandroid -mbionic -I${NDK_HOME}/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/include -I${SYSROOT}/usr/include/ --sysroot=${SYSROOT} -Wno-error -fPIE" \
-	LDFLAGS="-L${NDK_HOME}/platforms/android-${ANDROID_API}/arch-arm/usr/lib -pie" \
-	CPP=${CROSS_COMPILER}-cpp \
-	CPPFLAGS="-I${NDK_HOME}/platforms/android-${ANDROID_API}/arch-arm/usr/include/" \
-	AR=${CROSS_COMPILER}-ar
+	LDFLAGS="-L${NDK_HOME}/platforms/android-${ANDROID_API}/arch-arm/usr/lib -pie" \	
+	CPPFLAGS="-I${NDK_HOME}/platforms/android-${ANDROID_API}/arch-arm/usr/include/"
 
 # build gcc
 RUN make -j"$(nproc)"
