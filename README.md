@@ -36,6 +36,15 @@ See `config.log' for more details.
 The command '/bin/sh -c ../configure 	--host=arm-linux-androideabi 	--target=arm-linux-androideabi 	--build=arm-linux-androideabi 	--disable-option-checking  	--disable-multilib  	--disable-bootstrap 	CC=${CROSS_COMPILE}gcc 	CXX=${CROSS_COMPILE}g++ 	CFLAGS="-g -I -O2 -mandroid -mbionic -I${NDK_HOME}/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/lib/gcc/arm-linux-androideabi/4.9/include -I${SYSROOT}/usr/include/ --sysroot=${SYSROOT} -Wno-error -fPIE" 	LDFLAGS="-L${NDK_HOME}/platforms/android-15/arch-arm/usr/lib -pie" 	CPP=${CROSS_COMPILE}cpp 	CPPFLAGS="-I${NDK_HOME}/platforms/android-15/arch-arm/usr/include/" 	AR=${CROSS_COMPILE}ar' returned a non-zero code: 77
 ```
 
+## Some references
+
+1. https://mssun.me/blog/build-android-toolchain.html
+2. https://github.com/beurdouche/scripts/blob/master/build_gcc.sh
+3. http://choccyhobnob.com/tutorials/gcc-6-on-raspberry-pi/
+4. https://www.linux.com/blog/cross-compiling-arm
+5. https://github.com/cmbant/docker-gcc-build/blob/master/Dockerfile
+6. http://preshing.com/20141119/how-to-build-a-gcc-cross-compiler/
+
 ## Contact
 
 Email, skype and hangout: paulo[AT]prsolucoes.com
