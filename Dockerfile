@@ -24,29 +24,30 @@ RUN apt-get clean
 
 # base paths
 ENV BASE_DIR=/gcc-for-arm
-RUN mkdir -p $BASE_DIR
+RUN mkdir -p ${BASE_DIR}
 
 # download things here to prevent download everytime that Dockerfile is changed
-WORKDIR $BASE_DIR
-RUN wget https://github.com/gcc-mirror/gcc/archive/gcc-6_2_0-release.zip -O $BASE_DIR/gcc-6_2_0-release.zip
-RUN wget https://dl.google.com/android/repository/android-ndk-r13b-linux-x86_64.zip -O $BASE_DIR/android-ndk-r13b-linux-x86_64.zip
+WORKDIR ${BASE_DIR}
+RUN wget https://github.com/gcc-mirror/gcc/archive/gcc-6_2_0-release.zip -O ${BASE_DIR}/gcc-6_2_0-release.zip
+RUN wget https://dl.google.com/android/repository/android-ndk-r13b-linux-x86_64.zip -O ${BASE_DIR}/android-ndk-r13b-linux-x86_64.zip
 
 # unpack gcc
-RUN unzip $BASE_DIR/gcc-6_2_0-release.zip -d $BASE_DIR
-RUN rm -rf $BASE_DIR/gcc-6_2_0-release.zip
-ENV GCC_HOME=$BASE_DIR/gcc-gcc-6_2_0-release
+RUN unzip ${BASE_DIR}/gcc-6_2_0-release.zip -d ${BASE_DIR}
+RUN rm -rf ${BASE_DIR}/gcc-6_2_0-release.zip
+ENV GCC_HOME=${BASE_DIR}/gcc-gcc-6_2_0-release
 
-# if you want use android ndk compiler, uncomment these lines
-RUN unzip $BASE_DIR/android-ndk-r13b-linux-x86_64.zip -d $BASE_DIR
-RUN rm -rf $BASE_DIR/android-ndk-r13b-linux-x86_64.zip
-ENV NDK_HOME=$BASE_DIR/android-ndk-r13b
-ENV SYSROOT=$NDK_HOME/platforms/android-15/arch-arm
-ENV CROSS_COMPILER=$NDK_HOME/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-
+# android ndk
+ENV ANDROID_API=15
+RUN unzip ${BASE_DIR}/android-ndk-r13b-linux-x86_64.zip -d ${BASE_DIR}
+RUN rm -rf ${BASE_DIR}/android-ndk-r13b-linux-x86_64.zip
+ENV NDK_HOME=${BASE_DIR}/android-ndk-r13b
+ENV SYSROOT=${NDK_HOME}/platforms/android-${ANDROID_API}/arch-arm
+ENV CROSS_COMPILER=${NDK_HOME}/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi
 
 # compile gcc
-RUN rm -rf $BASE_DIR/gcc-gcc-6_2_0-release/build
-RUN mkdir -p $BASE_DIR/gcc-gcc-6_2_0-release/build
-WORKDIR $BASE_DIR/gcc-gcc-6_2_0-release/build
+RUN rm -rf ${BASE_DIR}/gcc-gcc-6_2_0-release/build
+RUN mkdir -p ${BASE_DIR}/gcc-gcc-6_2_0-release/build
+WORKDIR ${BASE_DIR}/gcc-gcc-6_2_0-release/build
 
 # configure gcc
 RUN ../configure \
@@ -56,13 +57,13 @@ RUN ../configure \
 	--disable-option-checking \
  	--disable-multilib \
  	--disable-bootstrap \	
-	CC=${CROSS_COMPILE}gcc \
-	CXX=${CROSS_COMPILE}g++ \
+	CC=${CROSS_COMPILER}-gcc \
+	CXX=${CROSS_COMPILER}-g++ \
 	CFLAGS="-g -I -O2 -mandroid -mbionic -I${NDK_HOME}/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/lib/gcc/arm-linux-androideabi/4.9/include -I${SYSROOT}/usr/include/ --sysroot=${SYSROOT} -Wno-error -fPIE" \
-	LDFLAGS="-L${NDK_HOME}/platforms/android-15/arch-arm/usr/lib -pie" \
-	CPP=${CROSS_COMPILE}cpp \
-	CPPFLAGS="-I${NDK_HOME}/platforms/android-15/arch-arm/usr/include/" \
-	AR=${CROSS_COMPILE}ar
+	LDFLAGS="-L${NDK_HOME}/platforms/android-${ANDROID_API}/arch-arm/usr/lib -pie" \
+	CPP=${CROSS_COMPILER}-cpp \
+	CPPFLAGS="-I${NDK_HOME}/platforms/android-${ANDROID_API}/arch-arm/usr/include/" \
+	AR=${CROSS_COMPILER}-ar
 
 # build gcc
 RUN make -j"$(nproc)"
