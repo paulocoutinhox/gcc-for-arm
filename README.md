@@ -1,6 +1,6 @@
 # This is a attempt to compile GCC to run on Android (ARM)
 
-Im trying compile the GCC and G++ to run inside my Android and compile inside my Android the **.c** and **.cpp** files.
+Im trying compile the GCC and G++ to run inside Android to compile inside Android the **.c** and **.cpp** files.
 
 ## Instructions
 
@@ -26,28 +26,17 @@ And see if show ARM on file arch
 
 ## Issues  
 
-In this repository you have the Dockerfile that try use the Android NDK compiler to do it, but is commented now, because when i try, i got error:
+When i run the script "build.sh" it make everything but not build the GCC, see the error:
 
 ```
 checking for C compiler default output file name... 
 configure: error: in `/gcc-for-arm/gcc-gcc-6_2_0-release/build':
 configure: error: C compiler cannot create executables
 See `config.log' for more details.
-The command '/bin/sh -c ../configure 	--enable-languages=c,c++ 	--disable-multilib 	--disable-bootstrap 	--target=arm-linux-androideabi 	--build=arm-linux-androideabi 	--host=arm-linux-androideabi' returned a non-zero code: 77
+The command '/bin/sh -c ../configure 	--host=arm-linux-androideabi 	--target=arm-linux-androideabi 	--build=arm-linux-androideabi 	--disable-option-checking  	--disable-multilib  	--disable-bootstrap 	CC=${CROSS_COMPILE}gcc 	CXX=${CROSS_COMPILE}g++ 	CFLAGS="-g -I -O2 -mandroid -mbionic -I${NDK_HOME}/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/lib/gcc/arm-linux-androideabi/4.9/include -I${SYSROOT}/usr/include/ --sysroot=${SYSROOT} -Wno-error -fPIE" 	LDFLAGS="-L${NDK_HOME}/platforms/android-15/arch-arm/usr/lib -pie" 	CPP=${CROSS_COMPILE}cpp 	CPPFLAGS="-I${NDK_HOME}/platforms/android-15/arch-arm/usr/include/" 	AR=${CROSS_COMPILE}ar' returned a non-zero code: 77
 ```
-
-If we need the NDK, only need uncomment that lines inside Dockerfile
-
-So, when you run script "build.sh" the Dockerfile will try generate the GCC without NDK by default, but without success too.
-
-```
-Building GCC requires GMP 4.2+, MPFR 2.4.0+ and MPC 0.8.0+.
-```
-
-Im trying solve it now.
-
-Can you help me with it?
 
 ## Contact
+
 Email, skype and hangout: paulo[AT]prsolucoes.com
 
