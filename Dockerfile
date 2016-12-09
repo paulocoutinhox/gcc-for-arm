@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:14.04
 
 MAINTAINER Paulo Coutinho
 
@@ -12,6 +12,8 @@ RUN apt-get update && apt-get install -y \
      openmpi-bin \
      libopenmpi-dev \
 	 wget \
+	 nano \
+	 curl \
 	 unzip \
 	 bison \
 	 flex \
@@ -25,38 +27,42 @@ ENV BASE_DIR=/gcc-for-arm
 RUN mkdir -p $BASE_DIR
 
 # download things here to prevent download everytime that Dockerfile is changed
+WORKDIR $BASE_DIR
 RUN wget https://github.com/gcc-mirror/gcc/archive/gcc-6_2_0-release.zip -O $BASE_DIR/gcc-6_2_0-release.zip
 RUN wget https://dl.google.com/android/repository/android-ndk-r13b-linux-x86_64.zip -O $BASE_DIR/android-ndk-r13b-linux-x86_64.zip
 
-# unpack gcc 6.2
+# unpack gcc
 RUN unzip $BASE_DIR/gcc-6_2_0-release.zip -d $BASE_DIR
 RUN rm -rf $BASE_DIR/gcc-6_2_0-release.zip
-ENV GCC_ROOT=$BASE_DIR/gcc-gcc-6_2_0-release
+ENV GCC_HOME=$BASE_DIR/gcc-gcc-6_2_0-release
 
 # if you want use android ndk compiler, uncomment these lines
-# RUN unzip $BASE_DIR/android-ndk-r13b-linux-x86_64.zip -d $BASE_DIR
-# RUN rm -rf $BASE_DIR/android-ndk-r13b-linux-x86_64.zip
-# ENV NDK_ROOT=$BASE_DIR/android-ndk-r13b
-# WORKDIR $NDK_ROOT/build/tools
-# RUN ./make_standalone_toolchain.py --arch arm --install-dir $BASE_DIR/arm-toolchain
-# ENV ARM_TOOLCHAIN=$BASE_DIR/arm-toolchain
-# ENV PATH=$PATH:$ARM_TOOLCHAIN/bin
-# ENV CC=$ARM_TOOLCHAIN/bin/arm-linux-androideabi-gcc
-# ENV LD=$ARM_TOOLCHAIN/bin/arm-linux-androideabi-ld
+RUN unzip $BASE_DIR/android-ndk-r13b-linux-x86_64.zip -d $BASE_DIR
+RUN rm -rf $BASE_DIR/android-ndk-r13b-linux-x86_64.zip
+ENV NDK_HOME=$BASE_DIR/android-ndk-r13b
+ENV SYSROOT=$NDK_HOME/platforms/android-15/arch-arm
+ENV CROSS_COMPILER=$NDK_HOME/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-
 
-# compile gcc 6.2
+# compile gcc
 RUN rm -rf $BASE_DIR/gcc-gcc-6_2_0-release/build
 RUN mkdir -p $BASE_DIR/gcc-gcc-6_2_0-release/build
 WORKDIR $BASE_DIR/gcc-gcc-6_2_0-release/build
 
 # configure gcc
 RUN ../configure \
-	--enable-languages=c,c++ \
-	--disable-multilib \
-	--disable-bootstrap \
+	--host=arm-linux-androideabi \
 	--target=arm-linux-androideabi \
 	--build=arm-linux-androideabi \
-	--host=arm-linux-androideabi
+	--disable-option-checking \
+ 	--disable-multilib \
+ 	--disable-bootstrap \	
+	CC=${CROSS_COMPILE}gcc \
+	CXX=${CROSS_COMPILE}g++ \
+	CFLAGS="-g -I -O2 -mandroid -mbionic -I${NDK_HOME}/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/lib/gcc/arm-linux-androideabi/4.9/include -I${SYSROOT}/usr/include/ --sysroot=${SYSROOT} -Wno-error -fPIE" \
+	LDFLAGS="-L${NDK_HOME}/platforms/android-15/arch-arm/usr/lib -pie" \
+	CPP=${CROSS_COMPILE}cpp \
+	CPPFLAGS="-I${NDK_HOME}/platforms/android-15/arch-arm/usr/include/" \
+	AR=${CROSS_COMPILE}ar
 
 # build gcc
 RUN make -j"$(nproc)"
