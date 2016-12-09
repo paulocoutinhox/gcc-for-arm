@@ -29,11 +29,12 @@ And see if show ARM on file arch
 When i run the script "build.sh" it make everything but not build the GCC, see the error:
 
 ```
-checking whether the C compiler works... configure: error: in `/gcc-for-arm/gcc-gcc-6_2_0-release/build':
-configure: error: cannot run C compiled programs.
-If you meant to cross compile, use `--host'.
-See `config.log' for more details.
-The command '/bin/sh -c ../configure 	--host=arm-linux-androideabi 	--target=arm-linux-androideabi 	--build=arm-linux-androideabi 	--disable-option-checking  	--disable-multilib  	--disable-bootstrap 	CC=${CROSS_COMPILER}-gcc 	CXX=${CROSS_COMPILER}-g++ 	CFLAGS="-g -I -O2 -mandroid -mbionic -I${NDK_HOME}/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/lib/gcc/arm-linux-androideabi/4.9/include -I${SYSROOT}/usr/include/ --sysroot=${SYSROOT} -Wno-error -fPIE" 	LDFLAGS="-L${NDK_HOME}/platforms/android-${ANDROID_API}/arch-arm/usr/lib -pie" 	CPP=${CROSS_COMPILER}-cpp 	CPPFLAGS="-I${NDK_HOME}/platforms/android-${ANDROID_API}/arch-arm/usr/include/" 	AR=${CROSS_COMPILER}-ar' returned a non-zero code: 1
+checking host system type... Invalid configuration `none-unknown-linux-androideabi': machine `none-unknown-linux' not recognized
+configure: error: /bin/bash ../../gmp/config.sub none-unknown-linux-androideabi failed
+no
+checking for strerror... make[1]: *** [configure-gmp] Error 1
+Makefile:4539: recipe for target 'configure-gmp' failed
+make[1]: *** Waiting for unfinished jobs....
 ```
 
 ## Some references
