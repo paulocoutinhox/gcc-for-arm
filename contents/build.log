@@ -1,0 +1,543 @@
+Sending build context to Docker daemon 183.8 kB
+Step 1 : FROM ubuntu:latest
+ ---> 4ca3a192ff2a
+Step 2 : MAINTAINER Paulo Coutinho
+ ---> Using cache
+ ---> 22fdb271b742
+Step 3 : RUN apt-get update && apt-get install -y      build-essential      git 	 python      liblapack-dev      libopenblas-dev      openmpi-bin      libopenmpi-dev 	 wget 	 nano 	 curl 	 unzip 	 bison 	 flex 	 libmpc-dev 	 libcloog-isl-dev 	 g++ 	 autotools-dev
+ ---> Using cache
+ ---> cd60746bdcc3
+Step 4 : RUN apt-get clean
+ ---> Using cache
+ ---> e694ad6fc804
+Step 5 : ENV BASE_DIR /gcc-for-arm
+ ---> Using cache
+ ---> 13be629eca43
+Step 6 : RUN mkdir -p ${BASE_DIR}
+ ---> Using cache
+ ---> afdf754cf36f
+Step 7 : WORKDIR ${BASE_DIR}
+ ---> Using cache
+ ---> b8503ebc02f7
+Step 8 : RUN wget https://github.com/gcc-mirror/gcc/archive/gcc-6_2_0-release.zip -O ${BASE_DIR}/gcc-6_2_0-release.zip
+ ---> Using cache
+ ---> 9e1cb546984f
+Step 9 : RUN wget https://dl.google.com/android/repository/android-ndk-r13b-linux-x86_64.zip -O ${BASE_DIR}/android-ndk-r13b-linux-x86_64.zip
+ ---> Using cache
+ ---> 3bbcbd64b54f
+Step 10 : RUN unzip ${BASE_DIR}/gcc-6_2_0-release.zip -d ${BASE_DIR}
+ ---> Using cache
+ ---> 2f9137ecec46
+Step 11 : RUN rm -rf ${BASE_DIR}/gcc-6_2_0-release.zip
+ ---> Using cache
+ ---> d05b503429c6
+Step 12 : ENV GCC_HOME ${BASE_DIR}/gcc-gcc-6_2_0-release
+ ---> Using cache
+ ---> cb430ce96afb
+Step 13 : ENV ANDROID_API 15
+ ---> Using cache
+ ---> 626c6342a979
+Step 14 : RUN unzip ${BASE_DIR}/android-ndk-r13b-linux-x86_64.zip -d ${BASE_DIR}
+ ---> Using cache
+ ---> 5682552004d2
+Step 15 : RUN rm -rf ${BASE_DIR}/android-ndk-r13b-linux-x86_64.zip
+ ---> Using cache
+ ---> 419ec8aa99fb
+Step 16 : ENV NDK_HOME ${BASE_DIR}/android-ndk-r13b
+ ---> Using cache
+ ---> 981c9b80f45e
+Step 17 : ENV SYSROOT ${NDK_HOME}/platforms/android-${ANDROID_API}/arch-arm
+ ---> Using cache
+ ---> b83cb43529d4
+Step 18 : ENV CROSS_COMPILER ${NDK_HOME}/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi
+ ---> Using cache
+ ---> 271f9bcab66e
+Step 19 : WORKDIR ${BASE_DIR}/gcc-gcc-6_2_0-release
+ ---> Using cache
+ ---> 2705b50fff51
+Step 20 : RUN ./contrib/download_prerequisites
+ ---> Using cache
+ ---> dcb21d712c77
+Step 21 : RUN rm -rf ${BASE_DIR}/gcc-gcc-6_2_0-release/build
+ ---> Using cache
+ ---> 1c9eb459102d
+Step 22 : RUN mkdir -p ${BASE_DIR}/gcc-gcc-6_2_0-release/build
+ ---> Using cache
+ ---> 6f2933696669
+Step 23 : WORKDIR ${BASE_DIR}/gcc-gcc-6_2_0-release/build
+ ---> Using cache
+ ---> fa4d9f6f69b5
+Step 24 : RUN ../configure 	--host=arm-linux-androideabi 	--target=arm-linux-androideabi 	--build=x86_64-linux-gnu 	--disable-option-checking  	--disable-multilib  	--disable-bootstrap 	--enable-languages=c,c++ 	CPP=${CROSS_COMPILER}-cpp 	AR=${CROSS_COMPILER}-ar 	CC=${CROSS_COMPILER}-gcc 	CXX=${CROSS_COMPILER}-g++ 	CFLAGS="-g -I -O2 -mandroid -mbionic -I${NDK_HOME}/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/include -I${SYSROOT}/usr/include/ --sysroot=${SYSROOT} -Wno-error -fPIE" 	LDFLAGS="-L${NDK_HOME}/platforms/android-${ANDROID_API}/arch-arm/usr/lib -pie" 	CPPFLAGS="-I${NDK_HOME}/platforms/android-${ANDROID_API}/arch-arm/usr/include/"
+ ---> Using cache
+ ---> 99397b4da83e
+Step 25 : RUN make -j"$(nproc)"
+ ---> Running in be7126c2f22a
+make[1]: Entering directory '/gcc-for-arm/gcc-gcc-6_2_0-release/build'
+mkdir -p -- ./fixincludes
+Configuring in ./fixincludes
+mkdir -p -- ./libiberty
+Configuring in ./libiberty
+configure: creating cache ./config.cache
+configure: creating cache ./config.cache
+checking whether to enable maintainer-specific portions of Makefiles... no
+checking for makeinfo... /gcc-for-arm/gcc-gcc-6_2_0-release/missing makeinfo --split-size=5000000
+[91mconfigure: WARNING:
+*** Makeinfo is missing. Info documentation will not be built.
+[0mchecking for perl... perl
+checking build system type... checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking host system type... arm-unknown-linux-androideabi
+checking for arm-linux-androideabi-ar... /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-ar
+checking for arm-linux-androideabi-ranlib... true
+checking whether to install libiberty headers and static library... no
+configure: target_header_dir = 
+checking for arm-linux-androideabi-gcc... /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc
+arm-unknown-linux-androideabi
+checking target system type... arm-unknown-linux-androideabi
+checking for arm-linux-androideabi-gcc... /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc
+checking for C compiler default output file name... checking for C compiler default output file name... a.out
+checking whether the C compiler works... yes
+checking whether we are cross compiling... yes
+checking for suffix of executables... a.out
+checking whether the C compiler works... yes
+checking whether we are cross compiling... yes
+checking for suffix of executables... 
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... 
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc accepts -g... yes
+yes
+checking whether /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc accepts -g... checking for /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc option to accept ISO C89... yes
+checking for /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc option to accept ISO C89... none needed
+checking how to run the C preprocessor... none needed
+checking how to run the C preprocessor... /lib/cpp
+/lib/cpp
+checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for ANSI C header files... checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/types.h... yes
+yes
+checking for sys/stat.h... checking for sys/stat.h... yes
+yes
+checking for stdlib.h... checking for stdlib.h... yes
+yes
+checking for string.h... checking for string.h... yes
+checking for memory.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+yes
+checking for stdint.h... checking for inttypes.h... yes
+yes
+checking for stdint.h... checking for unistd.h... yes
+yes
+checking for unistd.h... checking minix/config.h usability... yes
+checking minix/config.h usability... no
+checking minix/config.h presence... no
+checking for minix/config.h... no
+checking whether it is safe to define __EXTENSIONS__... no
+checking minix/config.h presence... no
+checking for minix/config.h... no
+checking whether it is safe to define __EXTENSIONS__... yes
+checking for a sed that does not truncate output... /bin/sed
+checking whether /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc supports -W... yes
+checking for special C compiler options needed for large files... no
+checking for _FILE_OFFSET_BITS value needed for large files... yes
+checking whether /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc supports -Wall... yes
+checking whether /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc supports -Wwrite-strings... yes
+unknown
+checking for _LARGE_FILES value needed for large files... checking whether /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc supports -Wstrict-prototypes... yes
+checking whether /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc supports -Wmissing-prototypes... unknown
+yes
+checking whether /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc supports -Wold-style-definition... checking whether /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc supports -W... yes
+yes
+checking whether /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc supports -Wall... checking whether /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc supports -Wmissing-format-attribute... yes
+yes
+checking whether /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc supports -Wwrite-strings... checking whether /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc supports -Woverlength-strings... yes
+yes
+checking whether /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc supports -pedantic -Wlong-long... checking whether /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc supports -Wc++-compat... yes
+yes
+checking for ANSI C header files... (cached) yes
+checking whether /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc supports -Wstrict-prototypes... checking stddef.h usability... yes
+checking whether /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc supports -pedantic ... yes
+checking stddef.h presence... yes
+checking whether /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc and cc understand -c and -o together... yes
+checking for stddef.h... yes
+checking for stdlib.h... (cached) yes
+checking for strings.h... (cached) yes
+checking for unistd.h... (cached) yes
+checking fcntl.h usability... yes
+checking fcntl.h presence... yes
+checking for fcntl.h... yes
+checking sys/file.h usability... yes
+checking for an ANSI C-conforming const... yes
+checking for inline... yes
+checking sys/file.h presence... yes
+checking for sys/file.h... yes
+inline
+checking whether byte ordering is bigendian... checking for sys/stat.h... (cached) yes
+checking for clearerr_unlocked... no
+checking for feof_unlocked... no
+checking for ferror_unlocked... no
+checking for a BSD-compatible install... /usr/bin/install -c
+checking for sys/file.h... yes
+checking for sys/param.h... no
+checking for fflush_unlocked... yes
+checking for limits.h... yes
+checking for stdlib.h... (cached) yes
+no
+checking for fgetc_unlocked... checking for malloc.h... yes
+checking for string.h... (cached) yes
+checking for unistd.h... (cached) yes
+no
+checking for strings.h... (cached) yes
+checking for fgets_unlocked... checking for sys/time.h... yes
+checking for time.h... yes
+no
+checking for fileno_unlocked... checking for sys/resource.h... yes
+checking for sys/stat.h... (cached) yes
+checking for sys/mman.h... no
+checking for fprintf_unlocked... yes
+checking for fcntl.h... yes
+checking for alloca.h... no
+checking for fputc_unlocked... yes
+checking for sys/pstat.h... no
+checking for sys/sysmp.h... no
+checking for fputs_unlocked... no
+checking for sys/sysinfo.h... yes
+checking for machine/hal_sysinfo.h... no
+checking for fread_unlocked... no
+checking for sys/table.h... no
+checking for sys/sysctl.h... yes
+no
+checking for fwrite_unlocked... checking for sys/systemcfg.h... no
+checking for stdint.h... (cached) yes
+checking for stdio_ext.h... no
+checking for getchar_unlocked... yes
+checking for process.h... no
+checking for sys/prctl.h... yes
+checking for getc_unlocked... yes
+checking for sys/wait.h that is POSIX.1 compatible... yes
+yes
+checking whether time.h and sys/time.h may both be included... checking for putchar_unlocked... yes
+checking whether errno must be declared... yes
+checking for putc_unlocked... no
+checking size of int... yes
+checking whether abort is declared... yes
+checking whether asprintf is declared... yes
+checking whether basename is declared... no
+checking whether errno is declared... no
+checking whether vasprintf is declared... 4
+checking size of long... yes
+checking whether clearerr_unlocked is declared... no
+checking whether feof_unlocked is declared... no
+checking whether ferror_unlocked is declared... no
+checking whether fflush_unlocked is declared... no
+checking whether fgetc_unlocked is declared... no
+checking whether fgets_unlocked is declared... 4
+checking size of size_t... no
+checking whether fileno_unlocked is declared... no
+checking whether fprintf_unlocked is declared... no
+checking whether fputc_unlocked is declared... no
+checking whether fputs_unlocked is declared... no
+checking whether fread_unlocked is declared... no
+checking whether fwrite_unlocked is declared... 4
+checking for long long... no
+checking whether getchar_unlocked is declared... yes
+checking whether getc_unlocked is declared... yes
+checking size of long long... yes
+checking whether putchar_unlocked is declared... yes
+checking whether putc_unlocked is declared... yes
+checking for an ANSI C-conforming const... yes
+checking sys/mman.h usability... yes
+checking sys/mman.h presence... yes
+checking for sys/mman.h... yes
+checking for mmap... yes
+checking whether read-only mmap of a plain file works... yes
+checking whether mmap from /dev/zero works... yes
+checking for MAP_ANON(YMOUS)... yes
+checking whether mmap with MAP_ANON(YMOUS) works... yes
+checking whether to enable maintainer-specific portions of Makefiles... no
+configure: updating cache ./config.cache
+configure: creating ./config.status
+8
+checking for a 64-bit type... uint64_t
+checking for intptr_t... config.status: creating Makefile
+config.status: creating mkheaders.almost
+config.status: creating config.h
+yes
+checking for uintptr_t... mkdir -p -- ./intl
+Configuring in ./intl
+yes
+checking for ssize_t... yes
+checking for pid_t... configure: creating cache ./config.cache
+checking whether make sets $(MAKE)... yes
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether NLS is requested... yes
+checking for msgfmt... no
+checking for gmsgfmt... :
+checking for xgettext... no
+checking for msgmerge... no
+checking for arm-linux-androideabi-gcc... /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc
+checking for C compiler default output file name... yes
+checking for library containing strerror... a.out
+checking whether the C compiler works... yes
+checking whether we are cross compiling... yes
+checking for suffix of executables... none required
+checking for asprintf... 
+checking for suffix of object files... yes
+o
+checking whether we are using the GNU C compiler... checking for atexit... yes
+checking whether /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc accepts -g... yes
+checking for /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc option to accept ISO C89... yes
+checking for basename... none needed
+yes
+checking for bcmp... checking build system type... x86_64-pc-linux-gnu
+checking host system type... arm-unknown-linux-androideabi
+checking for arm-linux-androideabi-ranlib... true
+checking for library containing strerror... no
+checking for bcopy... none required
+checking how to run the C preprocessor... no
+checking for bsearch... yes
+checking for bzero... /lib/cpp
+checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for ANSI C header files... no
+checking for calloc... yes
+checking for clock... yes
+checking for an ANSI C-conforming const... yes
+checking for inline... yes
+checking for ffs... inline
+checking for sys/types.h... yes
+checking for getcwd... yes
+checking for sys/stat.h... yes
+checking for getpagesize... (cached) yes
+checking for gettimeofday... yes
+checking for stdlib.h... yes
+checking for index... yes
+checking for string.h... no
+checking for insque... yes
+checking for memory.h... no
+checking for memchr... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for memcmp... yes
+yes
+checking for stdint.h... checking for memcpy... yes
+yes
+checking for unistd.h... checking for memmem... yes
+yes
+checking for memmove... checking for off_t... yes
+checking for mempcpy... yes
+checking for size_t... no
+checking for memset... yes
+checking for mkstemps... yes
+checking for working alloca.h... yes
+yes
+checking for alloca... checking for putenv... yes
+yes
+checking for stdlib.h... (cached) yes
+checking for random... checking for unistd.h... (cached) yes
+checking for getpagesize... no
+checking for rename... no
+checking for working mmap... no
+checking whether we are using the GNU C Library 2.1 or newer... yes
+checking whether integer division by zero raises SIGFPE... guessing no
+checking for inttypes.h... yes
+checking for rindex... yes
+checking for stdint.h... yes
+no
+checking for unsigned long long... checking for setenv... yes
+yes
+checking for inttypes.h... checking for snprintf... yes
+checking whether the inttypes.h PRIxNN macros are broken... yes
+checking for sigsetmask... no
+checking argz.h usability... yes
+no
+checking argz.h presence... checking for stpcpy... yes
+[91mconfigure: WARNING: argz.h: present but cannot be compiled
+configure: WARNING: argz.h:     check for missing prerequisite headers?
+[0mchecking for argz.h... no
+[91mconfigure: WARNING: argz.h: see the Autoconf documentation
+configure: WARNING: argz.h:     section "Present But Cannot Be Compiled"
+configure: WARNING: argz.h: proceeding with the compiler's result
+[0mchecking limits.h usability... no
+checking for stpncpy... yes
+checking limits.h presence... yes
+checking for limits.h... yes
+checking locale.h usability... no
+checking for strcasecmp... yes
+checking locale.h presence... yes
+checking for locale.h... yes
+checking nl_types.h usability... yes
+checking for strchr... no
+checking nl_types.h presence... [91mconfigure: WARNING: nl_types.h: present but cannot be compiled
+configure: WARNING: nl_types.h:     check for missing prerequisite headers?
+configure: WARNING: nl_types.h: see the Autoconf documentation
+configure: WARNING: nl_types.h:     section "Present But Cannot Be Compiled"
+[0myes
+checking for nl_types.h... no
+[91mconfigure: WARNING: nl_types.h: proceeding with the compiler's result
+[0mchecking malloc.h usability... yes
+checking for strdup... yes
+checking malloc.h presence... yes
+checking for malloc.h... yes
+checking stddef.h usability... yes
+checking for strncasecmp... yes
+checking stddef.h presence... yes
+checking for stddef.h... yes
+checking for stdlib.h... (cached) yes
+yes
+checking for string.h... (cached) yes
+checking for strndup... checking for unistd.h... (cached) yes
+checking sys/param.h usability... yes
+checking for strnlen... yes
+checking sys/param.h presence... yes
+checking for strrchr... yes
+checking for sys/param.h... yes
+checking for feof_unlocked... yes
+checking for strstr... no
+checking for fgets_unlocked... yes
+no
+checking for getc_unlocked... checking for strtod... yes
+yes
+checking for strtol... checking for getcwd... yes
+yes
+checking for strtoul... checking for getegid... yes
+yes
+checking for strtoll... checking for geteuid... yes
+yes
+checking for getgid... checking for strtoull... yes
+yes
+checking for getuid... checking for strverscmp... yes
+checking for mempcpy... no
+checking for tmpnam... no
+checking for munmap... yes
+checking for vasprintf... yes
+checking for putenv... yes
+checking for vfprintf... yes
+checking for setenv... yes
+checking for vprintf... yes
+checking for setlocale... yes
+yes
+checking for vsnprintf... checking for stpcpy... yes
+no
+checking for vsprintf... checking for strcasecmp... yes
+yes
+checking for waitpid... checking for strdup... yes
+checking for setproctitle... yes
+checking for strtoul... no
+checking whether alloca needs Cray hooks... no
+checking stack direction for C alloca... 0
+checking for vfork.h... no
+checking for fork... yes
+checking for tsearch... yes
+no
+checking for __argz_count... checking for vfork... yes
+checking for working fork... cross
+[91mconfigure: WARNING: result yes guessed because of cross compilation
+[0mchecking for working vfork... (cached) yes
+checking for _doprnt... no
+checking for __argz_stringify... no
+checking for sys_errlist... no
+checking for __argz_next... no
+checking for sys_nerr... no
+checking for __fsetlocking... no
+checking for sys_siglist... no
+checking for iconv... yes
+checking for external symbol _system_configuration... no
+checking for __fsetlocking... no, consider installing GNU libiconv
+checking for nl_langinfo and CODESET... no
+checking for canonicalize_file_name... no
+checking for LC_MESSAGES... no
+checking for dup3... yes
+checking for bison... bison
+checking version of bison... 3.0.4, ok
+checking for ld used by GCC... no
+checking for getrlimit... /gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/../lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin/ld
+checking if the linker (/gcc-for-arm/android-ndk-r13b/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/../lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin/ld) is GNU ld... yes
+checking for shared library run path origin... yes
+done
+checking whether NLS is requested... yes
+checking for getrusage... checking whether included gettext is requested... no
+checking for GNU gettext in libc... no
+checking for GNU gettext in libintl... yes
+checking for getsysinfo... no
+checking whether to use NLS... yes
+checking where the gettext function comes from... included intl directory
+checking for aclocal... no
+checking for autoconf... no
+checking for autoheader... no
+configure: updating cache ./config.cache
+configure: creating ./config.status
+no
+checking for gettimeofday... (cached) yes
+checking for on_exit... no
+checking for psignal... no
+checking for pstat_getdynamic... config.status: creating Makefile
+config.status: creating config.intl
+no
+config.status: creating config.h
+checking for pstat_getstatic... config.status: executing default-1 commands
+no
+checking for realpath... mkdir -p -- ./gmp
+Configuring in ./gmp
+yes
+checking for setrlimit... yes
+checking for sbrk... yes
+checking for spawnve... no
+checking for spawnvpe... configure: creating cache ./config.cache
+no
+checking for strerror... checking build system type... yes
+checking for strsignal... x86_64-pc-linux-gnu
+checking host system type... yes
+checking for sysconf... [91mInvalid configuration `none-unknown-linux-androideabi': machine `none-unknown-linux' not recognized
+[0m[91mconfigure: error: /bin/bash ../../gmp/config.sub none-unknown-linux-androideabi failed
+[0myes
+checking for sysctl... [91mmake[1]: *** [configure-gmp] Error 1
+make[1]: *** Waiting for unfinished jobs....
+[0mMakefile:4539: recipe for target 'configure-gmp' failed
+no
+checking for sysmp... no
+checking for table... no
+checking for times... yes
+checking for wait3... no
+checking for wait4... no
+checking whether basename is declared... no
+checking whether ffs is declared... yes
+checking whether asprintf is declared... yes
+checking whether vasprintf is declared... yes
+checking whether snprintf is declared... yes
+checking whether vsnprintf is declared... yes
+checking whether calloc is declared... yes
+checking whether getenv is declared... yes
+checking whether getopt is declared... yes
+checking whether malloc is declared... yes
+checking whether realloc is declared... yes
+checking whether sbrk is declared... yes
+checking whether strtol is declared... yes
+checking whether strtoul is declared... yes
+checking whether strtoll is declared... yes
+checking whether strtoull is declared... yes
+checking whether strverscmp is declared... no
+checking whether canonicalize_file_name must be declared... yes
+checking for stdlib.h... (cached) yes
+checking for unistd.h... (cached) yes
+checking for getpagesize... (cached) yes
+checking for working mmap... no
+checking for working strncmp... yes
+configure: updating cache ./config.cache
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating testsuite/Makefile
+config.status: creating config.h
+config.status: executing default commands
+make[1]: Leaving directory '/gcc-for-arm/gcc-gcc-6_2_0-release/build'
+Makefile:886: recipe for target 'all' failed
+[91mmake: *** [all] Error 2
+[0m

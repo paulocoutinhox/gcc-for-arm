@@ -37,6 +37,8 @@ Makefile:4539: recipe for target 'configure-gmp' failed
 make[1]: *** Waiting for unfinished jobs....
 ```
 
+*You can see the full log inside "contents/build.log"*
+
 ## Some references
 
 1. https://mssun.me/blog/build-android-toolchain.html
