@@ -29,11 +29,11 @@ And see if show ARM on file arch
 When i run the script "build.sh" it make everything but not build the GCC, see the error:
 
 ```
-checking for C compiler default output file name... 
-configure: error: in `/gcc-for-arm/gcc-gcc-6_2_0-release/build':
-configure: error: C compiler cannot create executables
+checking whether the C compiler works... configure: error: in `/gcc-for-arm/gcc-gcc-6_2_0-release/build':
+configure: error: cannot run C compiled programs.
+If you meant to cross compile, use `--host'.
 See `config.log' for more details.
-The command '/bin/sh -c ../configure 	--host=arm-linux-androideabi 	--target=arm-linux-androideabi 	--build=arm-linux-androideabi 	--disable-option-checking  	--disable-multilib  	--disable-bootstrap 	CC=${CROSS_COMPILE}gcc 	CXX=${CROSS_COMPILE}g++ 	CFLAGS="-g -I -O2 -mandroid -mbionic -I${NDK_HOME}/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/lib/gcc/arm-linux-androideabi/4.9/include -I${SYSROOT}/usr/include/ --sysroot=${SYSROOT} -Wno-error -fPIE" 	LDFLAGS="-L${NDK_HOME}/platforms/android-15/arch-arm/usr/lib -pie" 	CPP=${CROSS_COMPILE}cpp 	CPPFLAGS="-I${NDK_HOME}/platforms/android-15/arch-arm/usr/include/" 	AR=${CROSS_COMPILE}ar' returned a non-zero code: 77
+The command '/bin/sh -c ../configure 	--host=arm-linux-androideabi 	--target=arm-linux-androideabi 	--build=arm-linux-androideabi 	--disable-option-checking  	--disable-multilib  	--disable-bootstrap 	CC=${CROSS_COMPILER}-gcc 	CXX=${CROSS_COMPILER}-g++ 	CFLAGS="-g -I -O2 -mandroid -mbionic -I${NDK_HOME}/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/lib/gcc/arm-linux-androideabi/4.9/include -I${SYSROOT}/usr/include/ --sysroot=${SYSROOT} -Wno-error -fPIE" 	LDFLAGS="-L${NDK_HOME}/platforms/android-${ANDROID_API}/arch-arm/usr/lib -pie" 	CPP=${CROSS_COMPILER}-cpp 	CPPFLAGS="-I${NDK_HOME}/platforms/android-${ANDROID_API}/arch-arm/usr/include/" 	AR=${CROSS_COMPILER}-ar' returned a non-zero code: 1
 ```
 
 ## Some references
