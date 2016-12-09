@@ -59,7 +59,7 @@ RUN ../configure \
  	--disable-bootstrap \	
 	CC=${CROSS_COMPILER}-gcc \
 	CXX=${CROSS_COMPILER}-g++ \
-	CFLAGS="-g -I -O2 -mandroid -mbionic -I${NDK_HOME}/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/lib/gcc/arm-linux-androideabi/4.9/include -I${SYSROOT}/usr/include/ --sysroot=${SYSROOT} -Wno-error -fPIE" \
+	CFLAGS="-g -I -O2 -mandroid -mbionic -I${NDK_HOME}/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/include -I${SYSROOT}/usr/include/ --sysroot=${SYSROOT} -Wno-error -fPIE" \
 	LDFLAGS="-L${NDK_HOME}/platforms/android-${ANDROID_API}/arch-arm/usr/lib -pie" \
 	CPP=${CROSS_COMPILER}-cpp \
 	CPPFLAGS="-I${NDK_HOME}/platforms/android-${ANDROID_API}/arch-arm/usr/include/" \
