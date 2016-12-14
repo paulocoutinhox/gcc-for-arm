@@ -1,4 +1,4 @@
-Sending build context to Docker daemon 196.6 kB
+Sending build context to Docker daemon   213 kB
 Step 1 : FROM ubuntu:latest
  ---> 4ca3a192ff2a
 Step 2 : MAINTAINER Paulo Coutinho
@@ -73,37 +73,2381 @@ Step 24 : ENV NDK_HOME ${BASE_DIR}/android-ndk-r13b
 Step 25 : ENV NDK_GCC_VERSION 4.9
  ---> Using cache
  ---> 2436caae2483
-Step 26 : ENV CROSS_COMPILER_PREFIX ${NDK_HOME}/toolchains/arm-linux-androideabi-${NDK_GCC_VERSION}/prebuilt/linux-x86_64/bin/arm-linux-androideabi
+Step 26 : WORKDIR ${NDK_HOME}/build/tools
  ---> Using cache
- ---> 079d79b022b4
-Step 27 : WORKDIR ${BASE_DIR}
+ ---> 83e36a3f5bd2
+Step 27 : RUN ./make_standalone_toolchain.py --arch arm --install-dir ${BASE_DIR}/arm-toolchain
  ---> Using cache
- ---> 0a73ccbf0e42
-Step 28 : RUN tar xfjv "${GMP_VERSION}.tar.bz2"
+ ---> f9e16c3f7306
+Step 28 : ENV ARM_TOOLCHAIN ${BASE_DIR}/arm-toolchain
  ---> Using cache
- ---> 56ff62c26b07
-Step 29 : RUN mkdir "${GMP_VERSION}/build"
+ ---> 355f260f4440
+Step 29 : ENV CROSS_COMPILER_PREFIX ${ARM_TOOLCHAIN}/bin/arm-linux-androideabi
  ---> Using cache
- ---> 47af401e2232
-Step 30 : WORKDIR "${GMP_VERSION}/build"
+ ---> 111a261b9775
+Step 30 : ENV AR ${CROSS_COMPILER_PREFIX}-ar
  ---> Using cache
- ---> 3641d5598c11
-Step 31 : RUN ../configure 	--prefix="${GCC_PREFIX}/gmp" 	--host=arm-android-eabi  	--target=arm-android-eabi  	--build=x86_64-linux-gnu 	AR=${CROSS_COMPILER}-ar 	CC=${CROSS_COMPILER}-gcc 	CXX=${CROSS_COMPILER}-g++ 	CPP=${CROSS_COMPILER}-cpp
- ---> Running in 1620b2a75d72
+ ---> fbd4bfd5ce7d
+Step 31 : ENV CC ${CROSS_COMPILER_PREFIX}-gcc
+ ---> Using cache
+ ---> 310060c0e3f1
+Step 32 : ENV CXX ${CROSS_COMPILER_PREFIX}-g++
+ ---> Using cache
+ ---> 219c390abc74
+Step 33 : ENV CPP ${CROSS_COMPILER_PREFIX}-cpp
+ ---> Using cache
+ ---> 00b212f13428
+Step 34 : ENV CONFIG_COMPILER_HOST arm-android-eabi
+ ---> Using cache
+ ---> c8f32b0e4200
+Step 35 : ENV CONFIG_COMPILER_TARGET arm-android-eabi
+ ---> Using cache
+ ---> 6c3d77cf5ef9
+Step 36 : ENV CONFIG_COMPILER_BUILD x86_64-linux-gnu
+ ---> Using cache
+ ---> 9c4191faae19
+Step 37 : WORKDIR ${BASE_DIR}
+ ---> Using cache
+ ---> afc9c5d2006d
+Step 38 : RUN tar xfjv "${GMP_VERSION}.tar.bz2"
+ ---> Using cache
+ ---> ae43e7a8f12e
+Step 39 : RUN mkdir "${GMP_VERSION}/build"
+ ---> Using cache
+ ---> 7132cb7d4451
+Step 40 : WORKDIR "${GMP_VERSION}/build"
+ ---> Using cache
+ ---> 041088cf6cab
+Step 41 : RUN ../configure 	--prefix="${GCC_PREFIX}/gmp" 	--host=${CONFIG_COMPILER_HOST}  	--target=${CONFIG_COMPILER_TARGET}  	--build=${CONFIG_COMPILER_BUILD}
+ ---> Using cache
+ ---> b3e73d36fb89
+Step 42 : RUN make -j"$(nproc)"
+ ---> Using cache
+ ---> 6d892f654f85
+Step 43 : RUN make install
+ ---> Using cache
+ ---> a8d8a0ce43cf
+Step 44 : WORKDIR ${BASE_DIR}
+ ---> Using cache
+ ---> dbf8cf777ed0
+Step 45 : RUN tar xfvz "${MPFR_VERSION}.tar.gz"
+ ---> Using cache
+ ---> 0a2588521d4b
+Step 46 : RUN mkdir "${MPFR_VERSION}/build"
+ ---> Using cache
+ ---> 175c17bd91f3
+Step 47 : WORKDIR "${MPFR_VERSION}/build"
+ ---> Using cache
+ ---> e43deea2d5eb
+Step 48 : RUN ../configure 	--prefix="${GCC_PREFIX}/mpfr" 	--with-gmp="${GCC_PREFIX}/gmp" 	--host=${CONFIG_COMPILER_HOST}  	--target=${CONFIG_COMPILER_TARGET}  	--build=${CONFIG_COMPILER_BUILD}
+ ---> Using cache
+ ---> a42567d199b6
+Step 49 : RUN make -j"$(nproc)"
+ ---> Using cache
+ ---> a603ac03d4f5
+Step 50 : RUN make install
+ ---> Using cache
+ ---> f5cc58e7b312
+Step 51 : WORKDIR ${BASE_DIR}
+ ---> Using cache
+ ---> 7b760d7728ff
+Step 52 : RUN tar xfvz "${MPC_VERSION}.tar.gz"
+ ---> Using cache
+ ---> 57a276b2980f
+Step 53 : RUN mkdir "${MPC_VERSION}/build"
+ ---> Using cache
+ ---> c957a65ccb23
+Step 54 : WORKDIR "${MPC_VERSION}/build"
+ ---> Using cache
+ ---> 30f630abfeb6
+Step 55 : RUN ../configure 	--prefix="${GCC_PREFIX}/mpc" 	--with-gmp="${GCC_PREFIX}/gmp" 	--with-mpfr="${GCC_PREFIX}/mpfr" 	--host=${CONFIG_COMPILER_HOST}  	--target=${CONFIG_COMPILER_TARGET}  	--build=${CONFIG_COMPILER_BUILD}
+ ---> Using cache
+ ---> 59ea4eeac0e0
+Step 56 : RUN make -j"$(nproc)"
+ ---> Using cache
+ ---> a6fb39a9ae4c
+Step 57 : RUN make install
+ ---> Using cache
+ ---> 380a3ea53636
+Step 58 : WORKDIR ${BASE_DIR}
+ ---> Using cache
+ ---> 9c28a76e6709
+Step 59 : RUN tar xfvj "${ISL_VERSION}.tar.bz2"
+ ---> Using cache
+ ---> d732cd9c1087
+Step 60 : RUN mkdir "${ISL_VERSION}/build"
+ ---> Using cache
+ ---> ef7ad4b28fec
+Step 61 : WORKDIR "${ISL_VERSION}/build"
+ ---> Using cache
+ ---> d82942cd96d0
+Step 62 : RUN ../configure 	--prefix="${GCC_PREFIX}/isl" 	--with-gmp-prefix="${GCC_PREFIX}/gmp" 	--host=${CONFIG_COMPILER_HOST}  	--target=${CONFIG_COMPILER_TARGET}  	--build=${CONFIG_COMPILER_BUILD}
+ ---> Using cache
+ ---> 64462bf306d4
+Step 63 : RUN make -j"$(nproc)"
+ ---> Using cache
+ ---> ff9a23e0b144
+Step 64 : RUN make install
+ ---> Using cache
+ ---> e6c1d9deef15
+Step 65 : WORKDIR ${BASE_DIR}
+ ---> Using cache
+ ---> 40711ff70811
+Step 66 : RUN tar xfvz "${CLOOG_VERSION}.tar.gz"
+ ---> Using cache
+ ---> 6bd522a50550
+Step 67 : RUN mkdir "${CLOOG_VERSION}/build"
+ ---> Using cache
+ ---> 25d73ac65823
+Step 68 : WORKDIR "${CLOOG_VERSION}/build"
+ ---> Using cache
+ ---> c288a79addb2
+Step 69 : RUN ../configure 	--prefix="${GCC_PREFIX}/cloog" 	--with-gmp-prefix="${GCC_PREFIX}/gmp" 	--with-isl="${GCC_PREFIX}/isl" 	--host=${CONFIG_COMPILER_HOST}  	--target=${CONFIG_COMPILER_TARGET}  	--build=${CONFIG_COMPILER_BUILD}
+ ---> Using cache
+ ---> d5ab141887e5
+Step 70 : RUN make -j"$(nproc)"
+ ---> Using cache
+ ---> 1dda0cd4ef42
+Step 71 : RUN make install
+ ---> Using cache
+ ---> ed87633d4c84
+Step 72 : ENV LD_LIBRARY_PATH ${GCC_PREFIX}/gmp/lib:${GCC_PREFIX}/mpfr/lib:${GCC_PREFIX}/mpc/lib:${GCC_PREFIX}/isl/lib:${GCC_PREFIX}/cloog/lib
+ ---> Using cache
+ ---> 529380942f38
+Step 73 : ENV C_INCLUDE_PATH ${GCC_PREFIX}/gmp/include:${GCC_PREFIX}/mpfr/include:${GCC_PREFIX}/mpc/include:${GCC_PREFIX}/isl/include:${GCC_PREFIX}/cloog/include
+ ---> Using cache
+ ---> e0cf4b0d7f3d
+Step 74 : ENV CPLUS_INCLUDE_PATH ${GCC_PREFIX}/gmp/include:${GCC_PREFIX}/mpfr/include:${GCC_PREFIX}/mpc/include:${GCC_PREFIX}/isl/include:${GCC_PREFIX}/cloog/include
+ ---> Using cache
+ ---> 37d99fb9c0d5
+Step 75 : WORKDIR ${BASE_DIR}
+ ---> Using cache
+ ---> fcd97322c368
+Step 76 : RUN tar xfvj "${GCC_VERSION}.tar.bz2"
+ ---> Using cache
+ ---> bbcef1fc6a67
+Step 77 : RUN mkdir "${GCC_VERSION}/build"
+ ---> Using cache
+ ---> f9fd5917fa07
+Step 78 : WORKDIR "${GCC_VERSION}/build"
+ ---> Using cache
+ ---> 469e54421e13
+Step 79 : RUN ../configure 	--prefix="${GCC_PREFIX}/gcc" 	--with-gmp="${GCC_PREFIX}/gmp" 	--with-mpfr="${GCC_PREFIX}/mpfr" 	--with-mpc="${GCC_PREFIX}/mpc" 	--with-isl="${GCC_PREFIX}/isl" 	--with-cloog="${GCC_PREFIX}/cloog" 	--enable-languages=c,c++ 	--disable-multilib 	--host=${CONFIG_COMPILER_HOST}  	--target=${CONFIG_COMPILER_TARGET}  	--build=${CONFIG_COMPILER_BUILD}
+ ---> Using cache
+ ---> 22435f4b2ae8
+Step 80 : RUN make -j"$(nproc)"
+ ---> Running in a55fac3e737a
+make[1]: Entering directory '/gcc-for-arm/gcc-6.2.0/build'
+mkdir -p -- ./fixincludes
+mkdir -p -- ./libiberty
+Configuring in ./fixincludes
+Configuring in ./libiberty
+configure: creating cache ./config.cache
+configure: creating cache ./config.cache
+checking whether to enable maintainer-specific portions of Makefiles... no
+checking for makeinfo... /gcc-for-arm/gcc-6.2.0/missing makeinfo --split-size=5000000
+[91mconfigure: WARNING:
+[0m[91m*** Makeinfo is missing. Info documentation will not be built.
+[0mchecking for perl... perl
+checking build system type... checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking host system type... arm-android-eabi
+checking target system type... arm-android-eabi
+checking for arm-android-eabi-ar... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-ar
+checking for arm-android-eabi-ranlib... true
+checking whether to install libiberty headers and static library... no
+configure: target_header_dir = 
+checking for arm-android-eabi-gcc... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc
+arm-android-eabi
+checking for arm-android-eabi-gcc... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc
+checking for C compiler default output file name... a.out
+checking whether the C compiler works... yes
+checking for C compiler default output file name... checking whether we are cross compiling... yes
+checking for suffix of executables... a.out
+checking whether the C compiler works... yes
+checking whether we are cross compiling... yes
+checking for suffix of executables... 
+checking for suffix of object files... 
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc accepts -g... o
+checking whether we are using the GNU C compiler... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc accepts -g... yes
+checking for /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc option to accept ISO C89... yes
+checking for /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc option to accept ISO C89... none needed
+checking how to run the C preprocessor... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-cpp
+none needed
+checking how to run the C preprocessor... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-cpp
+checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for ANSI C header files... checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+yes
+checking for sys/stat.h... checking for stdlib.h... yes
+yes
+checking for stdlib.h... checking for string.h... yes
+yes
+checking for string.h... checking for memory.h... yes
+yes
+checking for strings.h... checking for memory.h... yes
+yes
+checking for inttypes.h... checking for strings.h... yes
+yes
+checking for stdint.h... checking for inttypes.h... yes
+checking for unistd.h... yes
+checking for stdint.h... yes
+yes
+checking minix/config.h usability... checking for unistd.h... yes
+no
+checking minix/config.h presence... checking minix/config.h usability... no
+checking for minix/config.h... no
+checking whether it is safe to define __EXTENSIONS__... no
+checking minix/config.h presence... no
+checking for minix/config.h... no
+checking whether it is safe to define __EXTENSIONS__... yes
+checking for a sed that does not truncate output... /bin/sed
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -W... yes
+yes
+checking for special C compiler options needed for large files... no
+checking for _FILE_OFFSET_BITS value needed for large files... checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wall... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wwrite-strings... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wstrict-prototypes... unknown
+checking for _LARGE_FILES value needed for large files... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wmissing-prototypes... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wold-style-definition... unknown
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -W... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wmissing-format-attribute... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wall... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Woverlength-strings... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wwrite-strings... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -pedantic -Wlong-long... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wc++-compat... yes
+checking for ANSI C header files... (cached) yes
+checking stddef.h usability... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wstrict-prototypes... yes
+yes
+checking stddef.h presence... checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -pedantic ... yes
+checking for stddef.h... yes
+checking for stdlib.h... (cached) yes
+checking for strings.h... (cached) yes
+checking for unistd.h... (cached) yes
+yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc and cc understand -c and -o together... checking fcntl.h usability... yes
+checking fcntl.h presence... yes
+checking for fcntl.h... yes
+checking sys/file.h usability... yes
+checking for an ANSI C-conforming const... yes
+checking sys/file.h presence... yes
+checking for sys/file.h... yes
+yes
+checking for inline... checking for sys/stat.h... (cached) yes
+checking for clearerr_unlocked... inline
+checking whether byte ordering is bigendian... no
+checking for feof_unlocked... no
+checking for ferror_unlocked... no
+no
+checking for a BSD-compatible install... checking for fflush_unlocked... /usr/bin/install -c
+checking for sys/file.h... yes
+no
+checking for fgetc_unlocked... checking for sys/param.h... yes
+checking for limits.h... yes
+no
+checking for stdlib.h... (cached) yes
+checking for fgets_unlocked... checking for malloc.h... yes
+checking for string.h... (cached) yes
+no
+checking for fileno_unlocked... checking for unistd.h... (cached) yes
+checking for strings.h... (cached) yes
+checking for sys/time.h... yes
+checking for time.h... no
+checking for fprintf_unlocked... yes
+checking for sys/resource.h... yes
+checking for sys/stat.h... (cached) yes
+checking for sys/mman.h... no
+checking for fputc_unlocked... yes
+checking for fcntl.h... yes
+checking for alloca.h... no
+checking for fputs_unlocked... yes
+checking for sys/pstat.h... no
+checking for sys/sysmp.h... no
+checking for fread_unlocked... no
+checking for sys/sysinfo.h... yes
+checking for machine/hal_sysinfo.h... no
+checking for fwrite_unlocked... no
+checking for sys/table.h... no
+checking for sys/sysctl.h... no
+no
+checking for getchar_unlocked... checking for sys/systemcfg.h... no
+checking for stdint.h... (cached) yes
+checking for stdio_ext.h... yes
+checking for getc_unlocked... no
+checking for process.h... no
+checking for sys/prctl.h... yes
+yes
+checking for sys/wait.h that is POSIX.1 compatible... checking for putchar_unlocked... yes
+checking whether time.h and sys/time.h may both be included... yes
+checking for putc_unlocked... yes
+checking whether errno must be declared... no
+checking size of int... yes
+checking whether abort is declared... yes
+checking whether asprintf is declared... yes
+checking whether basename is declared... no
+checking whether errno is declared... no
+checking whether vasprintf is declared... 4
+checking size of long... yes
+checking whether clearerr_unlocked is declared... no
+checking whether feof_unlocked is declared... no
+checking whether ferror_unlocked is declared... no
+checking whether fflush_unlocked is declared... no
+checking whether fgetc_unlocked is declared... no
+checking whether fgets_unlocked is declared... 4
+checking size of size_t... no
+checking whether fileno_unlocked is declared... no
+checking whether fprintf_unlocked is declared... no
+checking whether fputc_unlocked is declared... no
+checking whether fputs_unlocked is declared... no
+checking whether fread_unlocked is declared... 4
+checking for long long... no
+checking whether fwrite_unlocked is declared... yes
+checking size of long long... no
+checking whether getchar_unlocked is declared... yes
+checking whether getc_unlocked is declared... yes
+checking whether putchar_unlocked is declared... yes
+checking whether putc_unlocked is declared... yes
+checking for an ANSI C-conforming const... yes
+checking sys/mman.h usability... yes
+checking sys/mman.h presence... yes
+checking for sys/mman.h... yes
+checking for mmap... yes
+checking whether read-only mmap of a plain file works... yes
+checking whether mmap from /dev/zero works... yes
+checking for MAP_ANON(YMOUS)... 8
+checking for a 64-bit type... yes
+checking whether mmap with MAP_ANON(YMOUS) works... yes
+checking whether to enable maintainer-specific portions of Makefiles... no
+uint64_t
+checking for intptr_t... configure: updating cache ./config.cache
+configure: creating ./config.status
+yes
+checking for uintptr_t... config.status: creating Makefile
+config.status: creating mkheaders.almost
+yes
+checking for ssize_t... config.status: creating config.h
+mkdir -p -- ./intl
+Configuring in ./intl
+yes
+checking for pid_t... yes
+checking for library containing strerror... configure: creating cache ./config.cache
+checking whether make sets $(MAKE)... none required
+yes
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether NLS is requested... yes
+checking for asprintf... checking for msgfmt... no
+checking for gmsgfmt... :
+checking for xgettext... no
+checking for msgmerge... no
+checking for arm-android-eabi-gcc... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc
+checking for C compiler default output file name... yes
+checking for atexit... a.out
+checking whether the C compiler works... yes
+checking whether we are cross compiling... yes
+checking for suffix of executables... 
+yes
+checking for suffix of object files... checking for basename... o
+checking whether we are using the GNU C compiler... yes
+yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc accepts -g... checking for bcmp... yes
+checking for /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc option to accept ISO C89... none needed
+no
+checking for bcopy... checking build system type... x86_64-pc-linux-gnu
+checking host system type... arm-android-eabi
+checking for arm-android-eabi-ranlib... true
+checking for library containing strerror... no
+checking for bsearch... none required
+checking how to run the C preprocessor... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-cpp
+yes
+checking for bzero... checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for ANSI C header files... no
+checking for calloc... yes
+checking for an ANSI C-conforming const... yes
+checking for inline... yes
+checking for clock... inline
+checking for sys/types.h... yes
+yes
+checking for sys/stat.h... checking for ffs... yes
+checking for stdlib.h... yes
+checking for getcwd... yes
+yes
+checking for string.h... checking for getpagesize... yes
+checking for memory.h... no
+checking for gettimeofday... yes
+checking for strings.h... yes
+checking for index... yes
+checking for inttypes.h... no
+checking for insque... yes
+checking for stdint.h... no
+checking for memchr... yes
+checking for unistd.h... yes
+checking for memcmp... yes
+checking for off_t... yes
+checking for memcpy... yes
+checking for memmem... yes
+checking for size_t... yes
+checking for memmove... yes
+checking for working alloca.h... yes
+checking for mempcpy... yes
+checking for alloca... no
+checking for memset... yes
+checking for stdlib.h... (cached) yes
+checking for unistd.h... (cached) yes
+checking for getpagesize... yes
+checking for mkstemps... no
+checking for working mmap... no
+checking whether we are using the GNU C Library 2.1 or newer... no
+checking whether integer division by zero raises SIGFPE... guessing no
+yes
+checking for inttypes.h... checking for putenv... yes
+checking for stdint.h... yes
+checking for random... yes
+checking for unsigned long long... no
+yes
+checking for inttypes.h... checking for rename... yes
+checking whether the inttypes.h PRIxNN macros are broken... yes
+checking for rindex... no
+checking argz.h usability... no
+checking argz.h presence... no
+checking for setenv... no
+checking for argz.h... no
+checking limits.h usability... yes
+checking for snprintf... yes
+checking limits.h presence... yes
+checking for limits.h... yes
+yes
+checking locale.h usability... checking for sigsetmask... yes
+yes
+checking locale.h presence... checking for stpcpy... yes
+checking for locale.h... yes
+checking nl_types.h usability... no
+checking nl_types.h presence... no
+checking for stpncpy... no
+checking for nl_types.h... no
+checking malloc.h usability... no
+checking for strcasecmp... yes
+checking malloc.h presence... yes
+checking for malloc.h... yes
+checking stddef.h usability... yes
+checking for strchr... yes
+checking stddef.h presence... yes
+checking for stddef.h... yes
+checking for stdlib.h... (cached) yes
+yes
+checking for string.h... (cached) yes
+checking for strdup... checking for unistd.h... (cached) yes
+checking sys/param.h usability... yes
+checking for strncasecmp... yes
+checking sys/param.h presence... yes
+checking for sys/param.h... yes
+yes
+checking for feof_unlocked... checking for strndup... no
+yes
+checking for fgets_unlocked... checking for strnlen... no
+yes
+checking for getc_unlocked... checking for strrchr... yes
+checking for getcwd... yes
+checking for strstr... yes
+checking for getegid... yes
+checking for strtod... yes
+checking for geteuid... yes
+checking for strtol... yes
+checking for getgid... yes
+checking for strtoul... yes
+yes
+checking for getuid... checking for strtoll... yes
+yes
+checking for mempcpy... checking for strtoull... yes
+no
+checking for strverscmp... checking for munmap... no
+yes
+checking for tmpnam... checking for putenv... yes
+yes
+checking for setenv... checking for vasprintf... yes
+yes
+checking for setlocale... checking for vfprintf... yes
+yes
+checking for stpcpy... checking for vprintf... no
+yes
+checking for strcasecmp... checking for vsnprintf... yes
+yes
+checking for vsprintf... checking for strdup... yes
+yes
+checking for waitpid... checking for strtoul... yes
+yes
+checking for tsearch... checking for setproctitle... no
+checking whether alloca needs Cray hooks... no
+checking stack direction for C alloca... 0
+checking for vfork.h... no
+checking for __argz_count... no
+checking for fork... no
+yes
+checking for __argz_stringify... checking for vfork... yes
+no
+checking for working fork... [91mconfigure: WARNING: result yes guessed because of cross compilation
+[0mcross
+checking for working vfork... (cached) yes
+checking for _doprnt... checking for __argz_next... no
+checking for sys_errlist... no
+checking for __fsetlocking... no
+checking for sys_nerr... no
+checking for iconv... no
+checking for sys_siglist... no, consider installing GNU libiconv
+checking for nl_langinfo and CODESET... yes
+checking for external symbol _system_configuration... no
+checking for LC_MESSAGES... no
+checking for __fsetlocking... yes
+checking for bison... no
+checking for ld used by GCC... no
+checking for canonicalize_file_name... /gcc-for-arm/arm-toolchain/bin/../lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin/ld
+checking if the linker (/gcc-for-arm/arm-toolchain/bin/../lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin/ld) is GNU ld... yes
+checking for shared library run path origin... no
+checking for dup3... done
+checking whether NLS is requested... yes
+checking whether included gettext is requested... no
+checking for GNU gettext in libc... no
+checking for GNU gettext in libintl... no
+checking for getrlimit... no
+checking whether to use NLS... yes
+checking where the gettext function comes from... included intl directory
+checking for aclocal... no
+checking for autoconf... no
+checking for autoheader... no
+yes
+configure: updating cache ./config.cache
+configure: creating ./config.status
+checking for getrusage... yes
+checking for getsysinfo... no
+checking for gettimeofday... (cached) yes
+checking for on_exit... config.status: creating Makefile
+no
+checking for psignal... config.status: creating config.intl
+config.status: creating config.h
+config.status: executing default-1 commands
+no
+checking for pstat_getdynamic... mkdir -p -- ./lto-plugin
+no
+Configuring in ./lto-plugin
+checking for pstat_getstatic... no
+checking for realpath... yes
+checking for setrlimit... yes
+checking for sbrk... yes
+checking for spawnve... configure: creating cache ./config.cache
 checking build system type... x86_64-pc-linux-gnu
 checking host system type... arm-android-eabi
+checking target system type... no
+arm-android-eabi
 checking for a BSD-compatible install... /usr/bin/install -c
-checking whether build environment is sane... yes
+checking whether build environment is sane... checking for spawnvpe... no
+checking for strerror... yes
+checking for strsignal... yes
+checking for sysconf... yes
+checking for sysctl... no
+checking for sysmp... no
+checking for table... no
+checking for times... yes
+checking for wait3... no
+checking for wait4... no
+checking whether basename is declared... no
+checking whether ffs is declared... yes
 checking for arm-android-eabi-strip... no
 checking for strip... strip
-checking for a thread-safe mkdir -p... /bin/mkdir -p
-checking for gawk... no
-checking for mawk... mawk
-[91mconfigure: WARNING: using cross tools not prefixed with host triplet
-[0mchecking whether make sets $(MAKE)... yes
-checking whether make supports nested variables... yes
+checking for a thread-safe mkdir -p... [91mconfigure: WARNING: using cross tools not prefixed with host triplet
+[0m/bin/mkdir -p
+checking for gawk... mawk
+checking whether make sets $(MAKE)... yes
+yes
 checking whether to enable maintainer-specific portions of Makefiles... no
-checking ABI=standard
-checking compiler -gcc  ... no
-[91mconfigure: error: could not find a working compiler, see config.log for details
-[0m
+checking for style of include used by make... checking whether asprintf is declared... GNU
+checking for arm-android-eabi-gcc... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc
+checking for C compiler default output file name... yes
+checking whether vasprintf is declared... a.out
+checking whether the C compiler works... yes
+checking whether we are cross compiling... yes
+checking for suffix of executables... 
+checking for suffix of object files... yes
+checking whether snprintf is declared... o
+checking whether we are using the GNU C compiler... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc accepts -g... yes
+checking whether vsnprintf is declared... yes
+checking for /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc option to accept ISO C89... yes
+checking whether calloc is declared... none needed
+checking dependency style of /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc... yes
+checking whether getenv is declared... gcc3
+checking how to run the C preprocessor... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-cpp
+yes
+checking whether getopt is declared... checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for ANSI C header files... yes
+checking whether malloc is declared... yes
+checking for sys/types.h... yes
+yes
+checking whether realloc is declared... checking for sys/stat.h... yes
+yes
+checking for stdlib.h... checking whether sbrk is declared... yes
+checking for string.h... yes
+checking whether strtol is declared... yes
+checking for memory.h... yes
+checking whether strtoul is declared... yes
+checking for strings.h... yes
+checking whether strtoll is declared... yes
+checking for inttypes.h... yes
+checking whether strtoull is declared... yes
+checking for stdint.h... yes
+checking whether strverscmp is declared... yes
+checking for unistd.h... no
+checking whether canonicalize_file_name must be declared... yes
+checking minix/config.h usability... no
+checking minix/config.h presence... yes
+checking for stdlib.h... (cached) yes
+checking for unistd.h... (cached) yes
+no
+checking for minix/config.h... no
+checking whether it is safe to define __EXTENSIONS__... checking for getpagesize... (cached) no
+checking for working mmap... no
+checking for working strncmp... yes
+configure: updating cache ./config.cache
+yes
+checking for arm-android-eabi-gcc... (cached) /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc
+checking whether we are using the GNU C compiler... (cached) yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc accepts -g... (cached) yes
+checking for /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc option to accept ISO C89... (cached) none needed
+checking dependency style of /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc... (cached) gcc3
+checking for special C compiler options needed for large files... no
+checking for _FILE_OFFSET_BITS value needed for large files... configure: creating ./config.status
+unknown
+checking for _LARGE_FILES value needed for large files... unknown
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wall... yes
+checking for -static-libgcc... config.status: creating Makefile
+yes
+checking how to print strings... config.status: creating testsuite/Makefile
+config.status: creating config.h
+printf
+checking for a sed that does not truncate output... /bin/sed
+checking for fgrep... /bin/grep -F
+checking for ld used by /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc... config.status: executing default commands
+/gcc-for-arm/arm-toolchain/bin/../lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin/ld
+checking if the linker (/gcc-for-arm/arm-toolchain/bin/../lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin/ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... arm-android-eabi-nm
+checking the name lister (arm-android-eabi-nm) interface... make[2]: Entering directory '/gcc-for-arm/gcc-6.2.0/build/intl'
+rm -f stamp-h1
+/bin/bash ./config.status config.h
+BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking whether the shell understands some XSI constructs... yes
+checking whether the shell understands "+="... yes
+checking for /gcc-for-arm/arm-toolchain/bin/../lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin/ld option to reload object files... -r
+checking for arm-android-eabi-objdump... arm-android-eabi-objdump
+checking how to recognize dependent libraries... unknown
+checking for arm-android-eabi-ar... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-ar
+checking for arm-android-eabi-strip... strip
+checking for arm-android-eabi-ranlib... true
+checking command to parse arm-android-eabi-nm output from /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc object... config.status: creating config.h
+config.status: config.h is unchanged
+cp ../../intl/libgnuintl.h libintl.h
+test -f config.h || (rm -f stamp-h1 && make stamp-h1)
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c  -g -O2 -DHAVE_CONFIG_H  -I. -I../../intl ../../intl/bindtextdom.c
+failed
+checking for dlfcn.h... yes
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c  -g -O2 -DHAVE_CONFIG_H  -I. -I../../intl ../../intl/dcgettext.c
+checking for objdir... .libs
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c  -g -O2 -DHAVE_CONFIG_H  -I. -I../../intl ../../intl/dgettext.c
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c  -g -O2 -DHAVE_CONFIG_H  -I. -I../../intl ../../intl/gettext.c
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c  -g -O2 -DHAVE_CONFIG_H  -I. -I../../intl ../../intl/finddomain.c
+checking if /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -fno-rtti -fno-exceptions... no
+checking for /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc option to produce PIC... -fPIC -DPIC
+checking if /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc PIC flag -fPIC -DPIC works... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c  -g -O2 -DHAVE_CONFIG_H  -I. -I../../intl ../../intl/loadmsgcat.c
+yes
+checking if /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc static flag -static works... yes
+checking if /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -c -o file.o... yes
+checking if /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -c -o file.o... (cached) yes
+checking whether the /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc linker (/gcc-for-arm/arm-toolchain/bin/../lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin/ld) supports shared libraries... yes
+checking whether -lc should be explicitly linked in... no
+checking dynamic linker characteristics... no
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... no
+checking whether to build shared libraries... no
+checking whether to build static libraries... yes
+checking for int64_t... yes
+checking for uint64_t... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c  -g -O2 -DHAVE_CONFIG_H -DLOCALE_ALIAS_PATH="\"/gcc-for-arm/gcc-build/gcc/share/locale\"" -I. -I../../intl ../../intl/localealias.c
+yes
+checking for sys/wait.h that is POSIX.1 compatible... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c  -g -O2 -DHAVE_CONFIG_H  -I. -I../../intl ../../intl/textdomain.c
+yes
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c  -g -O2 -DHAVE_CONFIG_H  -I. -I../../intl ../../intl/l10nflist.c
+configure: updating cache ./config.cache
+configure: creating ./config.status
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c  -g -O2 -DHAVE_CONFIG_H  -I. -I../../intl ../../intl/explodename.c
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c  -g -O2 -DHAVE_CONFIG_H -DLOCALEDIR="\"/gcc-for-arm/gcc-build/gcc/share/locale\"" -I. -I../../intl ../../intl/dcigettext.c
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c  -g -O2 -DHAVE_CONFIG_H  -I. -I../../intl ../../intl/dcngettext.c
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c  -g -O2 -DHAVE_CONFIG_H  -I. -I../../intl ../../intl/dngettext.c
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c  -g -O2 -DHAVE_CONFIG_H  -I. -I../../intl ../../intl/ngettext.c
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c  -g -O2 -DHAVE_CONFIG_H  -I. -I../../intl ../../intl/plural.c
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c  -g -O2 -DHAVE_CONFIG_H  -I. -I../../intl ../../intl/plural-exp.c
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c  -g -O2 -DHAVE_CONFIG_H -DLIBDIR="\"/gcc-for-arm/gcc-build/gcc/lib\"" -I. -I../../intl ../../intl/localcharset.c
+config.status: creating Makefile
+config.status: creating config.h
+config.status: executing depfiles commands
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c  -g -O2 -DHAVE_CONFIG_H -DINSTALLDIR="\"/gcc-for-arm/gcc-build/gcc/lib\"" -I. -I../../intl ../../intl/relocatable.c
+config.status: executing libtool commands
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c  -g -O2 -DHAVE_CONFIG_H  -I. -I../../intl ../../intl/localename.c
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c  -g -O2 -DHAVE_CONFIG_H  -I. -I../../intl ../../intl/log.c
+mkdir -p -- build-x86_64-linux-gnu/libiberty
+Configuring in build-x86_64-linux-gnu/libiberty
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c  -g -O2 -DHAVE_CONFIG_H  -I. -I../../intl ../../intl/osdep.c
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c  -g -O2 -DHAVE_CONFIG_H  -I. -I../../intl ../../intl/intl-compat.c
+rm -f libintl.a
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-ar cru libintl.a bindtextdom.o dcgettext.o dgettext.o gettext.o finddomain.o loadmsgcat.o localealias.o textdomain.o l10nflist.o explodename.o dcigettext.o dcngettext.o dngettext.o ngettext.o plural.o plural-exp.o localcharset.o relocatable.o localename.o log.o osdep.o intl-compat.o
+true libintl.a
+make[2]: Leaving directory '/gcc-for-arm/gcc-6.2.0/build/intl'
+mkdir -p -- build-x86_64-linux-gnu/fixincludes
+Configuring in build-x86_64-linux-gnu/fixincludes
+configure: creating cache ./config.cache
+checking whether to enable maintainer-specific portions of Makefiles... no
+checking for makeinfo... /gcc-for-arm/gcc-6.2.0/missing makeinfo --split-size=5000000
+[91mconfigure: WARNING:
+*** Makeinfo is missing. Info documentation will not be built.
+[0mchecking for perl... perl
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking for x86_64-linux-gnu-ar... ar
+checking for x86_64-linux-gnu-ranlib... ranlib
+checking whether to install libiberty headers and static library... no
+configure: target_header_dir = 
+checking for x86_64-linux-gnu-gcc... gcc
+checking for C compiler default output file name... configure: creating cache ./config.cache
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... a.out
+checking whether the C compiler works... yes
+checking whether we are cross compiling... no
+checking for suffix of executables... x86_64-pc-linux-gnu
+checking target system type... arm-android-eabi
+checking for x86_64-linux-gnu-gcc... gcc
+
+checking for suffix of object files... checking for C compiler default output file name... o
+checking whether we are using the GNU C compiler... a.out
+checking whether the C compiler works... yes
+checking whether we are cross compiling... no
+checking for suffix of executables... yes
+checking whether gcc accepts -g... 
+yes
+checking for gcc option to accept ISO C89... checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether gcc accepts -g... none needed
+checking how to run the C preprocessor... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-cpp
+yes
+checking for gcc option to accept ISO C89... checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for ANSI C header files... none needed
+checking how to run the C preprocessor... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-cpp
+checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for sys/types.h... yes
+yes
+checking for stdlib.h... checking for sys/stat.h... yes
+yes
+checking for string.h... checking for stdlib.h... yes
+yes
+checking for string.h... checking for memory.h... yes
+yes
+checking for memory.h... checking for strings.h... yes
+yes
+checking for strings.h... checking for inttypes.h... yes
+yes
+checking for inttypes.h... checking for stdint.h... yes
+yes
+checking for unistd.h... checking for stdint.h... yes
+yes
+checking minix/config.h usability... checking for unistd.h... no
+checking minix/config.h presence... yes
+checking minix/config.h usability... no
+checking for minix/config.h... no
+checking whether it is safe to define __EXTENSIONS__... no
+checking minix/config.h presence... yes
+checking for special C compiler options needed for large files... no
+checking for _FILE_OFFSET_BITS value needed for large files... no
+checking for minix/config.h... no
+checking whether it is safe to define __EXTENSIONS__... no
+checking whether gcc supports -W... yes
+checking for a sed that does not truncate output... /bin/sed
+checking whether gcc supports -W... yes
+checking whether gcc supports -Wall... yes
+checking whether gcc supports -Wall... yes
+checking whether gcc supports -Wwrite-strings... yes
+checking whether gcc supports -Wwrite-strings... yes
+checking whether gcc supports -Wc++-compat... yes
+checking whether gcc supports -Wstrict-prototypes... yes
+checking whether gcc supports -Wstrict-prototypes... yes
+checking whether gcc supports -Wmissing-prototypes... yes
+checking whether gcc supports -pedantic ... yes
+checking whether gcc supports -Wold-style-definition... yes
+checking whether gcc and cc understand -c and -o together... yes
+checking whether gcc supports -Wmissing-format-attribute... yes
+checking whether gcc supports -Woverlength-strings... yes
+checking whether gcc supports -pedantic -Wlong-long... yes
+checking for ANSI C header files... (cached) yes
+checking stddef.h usability... yes
+checking for an ANSI C-conforming const... yes
+checking stddef.h presence... yes
+checking for inline... yes
+checking for stddef.h... yes
+checking for stdlib.h... (cached) inline
+yes
+checking whether byte ordering is bigendian... checking for strings.h... (cached) yes
+checking for unistd.h... (cached) yes
+checking fcntl.h usability... yes
+checking fcntl.h presence... yes
+checking for fcntl.h... yes
+checking sys/file.h usability... no
+checking for a BSD-compatible install... /usr/bin/install -c
+checking for sys/file.h... yes
+checking for sys/param.h... yes
+checking sys/file.h presence... yes
+checking for limits.h... yes
+checking for sys/file.h... yes
+checking for sys/stat.h... (cached) yes
+yes
+checking for clearerr_unlocked... checking for stdlib.h... (cached) yes
+checking for malloc.h... yes
+checking for string.h... (cached) yes
+checking for unistd.h... (cached) yes
+yes
+checking for strings.h... (cached) yes
+checking for feof_unlocked... checking for sys/time.h... yes
+checking for time.h... yes
+yes
+checking for ferror_unlocked... checking for sys/resource.h... yes
+checking for sys/stat.h... (cached) yes
+checking for sys/mman.h... yes
+yes
+checking for fflush_unlocked... checking for fcntl.h... yes
+checking for alloca.h... yes
+yes
+checking for sys/pstat.h... checking for fgetc_unlocked... no
+checking for sys/sysmp.h... no
+checking for sys/sysinfo.h... yes
+yes
+checking for machine/hal_sysinfo.h... checking for fgets_unlocked... no
+checking for sys/table.h... no
+checking for sys/sysctl.h... yes
+checking for fileno_unlocked... no
+checking for sys/systemcfg.h... no
+checking for stdint.h... (cached) yes
+checking for stdio_ext.h... no
+checking for process.h... yes
+checking for fprintf_unlocked... no
+checking for sys/prctl.h... yes
+checking for sys/wait.h that is POSIX.1 compatible... no
+checking for fputc_unlocked... yes
+checking whether time.h and sys/time.h may both be included... yes
+checking whether errno must be declared... yes
+no
+checking size of int... checking for fputs_unlocked... 4
+yes
+checking size of long... checking for fread_unlocked... yes
+checking for fwrite_unlocked... 8
+checking size of size_t... yes
+checking for getchar_unlocked... 8
+checking for long long... yes
+checking for getc_unlocked... yes
+checking size of long long... yes
+checking for putchar_unlocked... 8
+checking for a 64-bit type... yes
+checking for putc_unlocked... uint64_t
+checking for intptr_t... yes
+checking whether abort is declared... yes
+checking for uintptr_t... yes
+checking whether asprintf is declared... yes
+checking whether basename is declared... yes
+checking for ssize_t... yes
+checking whether errno is declared... yes
+checking for pid_t... no
+checking whether vasprintf is declared... yes
+checking whether clearerr_unlocked is declared... yes
+checking for library containing strerror... yes
+none required
+checking whether feof_unlocked is declared... checking for asprintf... yes
+yes
+checking whether ferror_unlocked is declared... checking for atexit... yes
+checking whether fflush_unlocked is declared... yes
+checking for basename... yes
+checking whether fgetc_unlocked is declared... yes
+checking for bcmp... yes
+checking whether fgets_unlocked is declared... yes
+checking for bcopy... yes
+checking whether fileno_unlocked is declared... yes
+checking for bsearch... yes
+checking whether fprintf_unlocked is declared... yes
+no
+checking for bzero... checking whether fputc_unlocked is declared... yes
+yes
+checking whether fputs_unlocked is declared... checking for calloc... yes
+checking whether fread_unlocked is declared... yes
+checking for clock... yes
+checking whether fwrite_unlocked is declared... yes
+checking for ffs... yes
+checking whether getchar_unlocked is declared... yes
+checking for getcwd... yes
+checking whether getc_unlocked is declared... yes
+checking for getpagesize... yes
+checking whether putchar_unlocked is declared... yes
+checking for gettimeofday... yes
+checking whether putc_unlocked is declared... yes
+checking for index... yes
+checking for an ANSI C-conforming const... yes
+yes
+checking sys/mman.h usability... checking for insque... yes
+checking sys/mman.h presence... yes
+yes
+checking for sys/mman.h... yes
+checking for mmap... checking for memchr... yes
+checking whether read-only mmap of a plain file works... yes
+checking whether mmap from /dev/zero works... yes
+checking for MAP_ANON(YMOUS)... yes
+checking for memcmp... yes
+checking whether mmap with MAP_ANON(YMOUS) works... yes
+checking whether to enable maintainer-specific portions of Makefiles... no
+configure: updating cache ./config.cache
+configure: creating ./config.status
+yes
+checking for memcpy... yes
+checking for memmem... config.status: creating Makefile
+yes
+checking for memmove... config.status: creating mkheaders.almost
+config.status: creating config.h
+yes
+checking for mempcpy... mkdir -p -- build-x86_64-linux-gnu/libcpp
+Configuring in build-x86_64-linux-gnu/libcpp
+yes
+checking for memset... yes
+checking for mkstemps... yes
+checking for putenv... configure: creating cache ./config.cache
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... yes
+x86_64-pc-linux-gnu
+checking target system type... checking for random... arm-android-eabi
+checking whether make sets $(MAKE)... yes
+checking for a BSD-compatible install... /usr/bin/install -c
+checking for x86_64-linux-gnu-gcc... gcc
+yes
+checking for C compiler default output file name... checking for rename... a.out
+checking whether the C compiler works... yes
+checking whether we are cross compiling... no
+checking for suffix of executables... yes
+checking for rindex... 
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+yes
+checking whether gcc accepts -g... checking for setenv... yes
+checking for gcc option to accept ISO C89... yes
+checking for snprintf... none needed
+checking whether we are using the GNU C++ compiler... yes
+checking for sigsetmask... yes
+checking whether g++ accepts -g... yes
+yes
+checking for x86_64-linux-gnu-ranlib... ranlib
+checking how to run the C preprocessor... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-cpp
+checking for stpcpy... checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for ANSI C header files... yes
+checking for stpncpy... yes
+checking for strcasecmp... yes
+checking for sys/types.h... yes
+checking for strchr... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for strdup... yes
+checking for string.h... yes
+yes
+checking for strncasecmp... checking for memory.h... yes
+checking for strings.h... yes
+checking for strndup... yes
+checking for inttypes.h... yes
+checking for strnlen... yes
+checking for stdint.h... yes
+yes
+checking for unistd.h... checking for strrchr... yes
+checking minix/config.h usability... yes
+checking for strstr... no
+checking minix/config.h presence... no
+checking for minix/config.h... no
+checking whether it is safe to define __EXTENSIONS__... yes
+checking for strtod... yes
+checking for special C compiler options needed for large files... no
+checking for _FILE_OFFSET_BITS value needed for large files... yes
+checking for strtol... no
+checking for aclocal... no
+checking for autoconf... no
+checking for autoheader... no
+checking whether gcc supports -W... yes
+checking whether gcc supports -Wall... yes
+yes
+checking for strtoul... checking whether gcc supports -Wnarrowing... yes
+checking whether gcc supports -Wwrite-strings... yes
+checking for strtoll... yes
+checking whether gcc supports -Wmissing-format-attribute... yes
+checking whether gcc supports -Wstrict-prototypes... yes
+checking for strtoull... yes
+checking whether gcc supports -Wmissing-prototypes... yes
+yes
+checking whether gcc supports -Wold-style-definition... checking for strverscmp... yes
+checking whether gcc supports -Wc++-compat... yes
+yes
+checking for tmpnam... checking whether gcc supports -pedantic -Wlong-long... yes
+checking whether gcc supports -fno-exceptions... yes
+yes
+checking whether gcc supports -fno-rtti... checking for vasprintf... yes
+yes
+checking dependency style of g++... checking for vfprintf... gcc3
+checking whether time.h and sys/time.h may both be included... yes
+checking for vprintf... yes
+checking whether string.h and strings.h may both be included... yes
+yes
+checking locale.h usability... checking for vsnprintf... yes
+checking locale.h presence... yes
+checking for locale.h... yes
+checking fcntl.h usability... yes
+checking for vsprintf... yes
+checking fcntl.h presence... yes
+checking for fcntl.h... yes
+checking limits.h usability... yes
+checking for waitpid... yes
+checking limits.h presence... yes
+checking for limits.h... yes
+checking stddef.h usability... yes
+checking for setproctitle... yes
+checking stddef.h presence... yes
+checking for stddef.h... yes
+checking for stdlib.h... (cached) yes
+checking for strings.h... (cached) yes
+no
+checking whether alloca needs Cray hooks... checking for string.h... (cached) yes
+no
+checking stack direction for C alloca... checking sys/file.h usability... yes
+checking sys/file.h presence... -1
+checking for vfork.h... yes
+checking for sys/file.h... yes
+checking for unistd.h... (cached) yes
+no
+checking whether byte ordering is bigendian... checking for fork... yes
+checking for vfork... no
+checking for an ANSI C-conforming const... yes
+checking for inline... yes
+checking for working fork... inline
+checking for obstacks... yes
+checking for working vfork... (cached) yes
+checking for _doprnt... yes
+checking for off_t... no
+checking for sys_errlist... yes
+checking for size_t... yes
+checking for sys_nerr... yes
+checking for sys_siglist... yes
+checking for ssize_t... yes
+checking for external symbol _system_configuration... no
+checking for __fsetlocking... yes
+checking for uintptr_t... yes
+checking for canonicalize_file_name... yes
+checking for ptrdiff_t... yes
+checking for dup3... yes
+yes
+checking for getrlimit... checking for uint64_t... yes
+yes
+checking whether struct tm is in sys/time.h or time.h... checking for getrusage... time.h
+checking size of int... yes
+checking for getsysinfo... 4
+checking size of long... no
+checking for gettimeofday... (cached) yes
+checking for on_exit... yes
+8
+checking for clearerr_unlocked... checking for psignal... yes
+yes
+checking for feof_unlocked... checking for pstat_getdynamic... yes
+no
+checking for ferror_unlocked... checking for pstat_getstatic... yes
+checking for fflush_unlocked... no
+checking for realpath... yes
+yes
+checking for fgetc_unlocked... checking for setrlimit... yes
+yes
+checking for fgets_unlocked... checking for sbrk... yes
+yes
+checking for spawnve... checking for fileno_unlocked... yes
+no
+checking for spawnvpe... checking for fprintf_unlocked... no
+checking for strerror... no
+checking for fputc_unlocked... yes
+checking for strsignal... yes
+checking for fputs_unlocked... yes
+checking for sysconf... yes
+checking for fread_unlocked... yes
+checking for sysctl... yes
+checking for fwrite_unlocked... yes
+checking for sysmp... yes
+checking for getchar_unlocked... no
+checking for table... yes
+checking for getc_unlocked... no
+checking for times... yes
+yes
+checking for putchar_unlocked... checking for wait3... yes
+checking for wait4... yes
+checking for putc_unlocked... yes
+checking whether basename is declared... yes
+checking whether abort is declared... yes
+yes
+checking whether ffs is declared... checking whether asprintf is declared... yes
+yes
+checking whether basename is declared... checking whether asprintf is declared... yes
+yes
+checking whether vasprintf is declared... checking whether errno is declared... no
+yes
+checking whether getopt is declared... checking whether snprintf is declared... yes
+yes
+checking whether vsnprintf is declared... checking whether vasprintf is declared... yes
+checking whether calloc is declared... yes
+checking whether clearerr_unlocked is declared... yes
+yes
+checking whether getenv is declared... checking whether feof_unlocked is declared... yes
+yes
+checking whether ferror_unlocked is declared... checking whether getopt is declared... yes
+yes
+checking whether malloc is declared... checking whether fflush_unlocked is declared... yes
+yes
+checking whether realloc is declared... checking whether fgetc_unlocked is declared... yes
+yes
+checking whether sbrk is declared... checking whether fgets_unlocked is declared... yes
+yes
+checking whether strtol is declared... checking whether fileno_unlocked is declared... yes
+yes
+checking whether strtoul is declared... checking whether fprintf_unlocked is declared... no
+yes
+checking whether fputc_unlocked is declared... checking whether strtoll is declared... yes
+yes
+checking whether strtoull is declared... checking whether fputs_unlocked is declared... yes
+yes
+checking whether strverscmp is declared... checking whether fread_unlocked is declared... yes
+yes
+checking whether canonicalize_file_name must be declared... checking whether fwrite_unlocked is declared... no
+checking for stdlib.h... (cached) yes
+yes
+checking for unistd.h... (cached) yes
+checking whether getchar_unlocked is declared... checking for getpagesize... (cached) yes
+checking for working mmap... yes
+checking whether getc_unlocked is declared... yes
+checking for working strncmp... yes
+checking whether putchar_unlocked is declared... yes
+configure: updating cache ./config.cache
+yes
+configure: creating ./config.status
+checking whether putc_unlocked is declared... yes
+checking for working alloca.h... yes
+checking for alloca... config.status: creating Makefile
+yes
+checking for ANSI C header files... (cached) yes
+checking for nl_langinfo and CODESET... config.status: creating testsuite/Makefile
+config.status: creating config.h
+config.status: executing default commands
+yes
+checking whether NLS is requested... no
+checking for uchar... 
+checking for ld used by GCC... ld
+checking if the linker (ld) is GNU ld... yes
+checking for shared library run path origin... mkdir -p -- ./zlib
+Configuring in ./zlib
+done
+checking for iconv... (cached) no
+configure: updating cache ./config.cache
+configure: creating ./config.status
+configure: creating cache ./config.cache
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... arm-android-eabi
+checking target system type... config.status: creating Makefile
+arm-android-eabi
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... config.status: creating config.h
+config.status: executing depdir commands
+mkdir -p -- .deps
+mkdir -p -- ./libbacktrace
+Configuring in ./libbacktrace
+configure: creating cache ./config.cache
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... arm-android-eabi
+checking target system type... arm-android-eabi
+checking for arm-android-eabi-gcc... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc
+checking for C compiler default output file name... a.out
+checking whether the C compiler works... yes
+checking whether we are cross compiling... yes
+checking for suffix of executables... 
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc accepts -g... yes
+checking for /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc option to accept ISO C89... none needed
+checking how to run the C preprocessor... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-cpp
+checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for arm-android-eabi-strip... no
+checking for strip... strip
+[91mconfigure: WARNING: using cross tools not prefixed with host triplet
+[0mchecking for a thread-safe mkdir -p... /bin/mkdir -p
+checking for gawk... mawk
+checking whether make sets $(MAKE)... yes
+yes
+checking whether to enable maintainer-specific portions of Makefiles... no
+checking for arm-android-eabi-gcc... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc
+checking for memory.h... yes
+checking for strings.h... checking for C compiler default output file name... a.out
+checking whether the C compiler works... yes
+yes
+checking whether we are cross compiling... yes
+checking for suffix of executables... checking for inttypes.h... 
+checking for suffix of object files... yes
+o
+checking whether we are using the GNU C compiler... checking for stdint.h... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc accepts -g... yes
+checking for unistd.h... yes
+checking for /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc option to accept ISO C89... yes
+checking minix/config.h usability... none needed
+checking for style of include used by make... GNU
+checking dependency style of /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc... no
+checking minix/config.h presence... gcc3
+checking how to print strings... no
+checking for minix/config.h... no
+checking whether it is safe to define __EXTENSIONS__... printf
+checking for a sed that does not truncate output... /bin/sed
+checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for fgrep... /bin/grep -F
+checking for ld used by /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc... yes
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... /gcc-for-arm/arm-toolchain/bin/../lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin/ld
+checking if the linker (/gcc-for-arm/arm-toolchain/bin/../lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin/ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... arm-android-eabi-nm
+checking the name lister (arm-android-eabi-nm) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking whether the shell understands some XSI constructs... yes
+checking whether the shell understands "+="... yes
+checking for /gcc-for-arm/arm-toolchain/bin/../lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin/ld option to reload object files... -r
+checking for arm-android-eabi-objdump... arm-android-eabi-objdump
+checking how to recognize dependent libraries... unknown
+checking for arm-android-eabi-ar... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-ar
+checking for arm-android-eabi-strip... strip
+checking for arm-android-eabi-ranlib... true
+checking command to parse arm-android-eabi-nm output from /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc object... failed
+checking how to run the C preprocessor... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-cpp
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+yes
+checking for arm-android-eabi-strip... no
+checking for strip... strip
+[91mconfigure: WARNING: using cross tools not prefixed with host triplet
+[0mchecking for a thread-safe mkdir -p... checking for string.h... /bin/mkdir -p
+checking for gawk... mawk
+checking whether make sets $(MAKE)... yes
+yes
+checking for memory.h... checking whether to enable maintainer-specific portions of Makefiles... no
+checking for arm-android-eabi-gcc... (cached) /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc
+yes
+checking for strings.h... checking whether we are using the GNU C compiler... (cached) yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc accepts -g... (cached) yes
+checking for /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc option to accept ISO C89... (cached) none needed
+checking for arm-android-eabi-ranlib... true
+checking for gawk... (cached) mawk
+checking how to print strings... printf
+yes
+checking for a sed that does not truncate output... checking for inttypes.h... /bin/sed
+checking for fgrep... /bin/grep -F
+checking for ld used by /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc... /gcc-for-arm/arm-toolchain/bin/../lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin/ld
+checking if the linker (/gcc-for-arm/arm-toolchain/bin/../lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin/ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... arm-android-eabi-nm
+yes
+checking the name lister (arm-android-eabi-nm) interface... checking for stdint.h... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking whether the shell understands some XSI constructs... yes
+checking whether the shell understands "+="... yes
+checking for /gcc-for-arm/arm-toolchain/bin/../lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin/ld option to reload object files... -r
+checking for arm-android-eabi-objdump... arm-android-eabi-objdump
+checking how to recognize dependent libraries... unknown
+checking for arm-android-eabi-ar... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-ar
+checking for arm-android-eabi-strip... strip
+checking for arm-android-eabi-ranlib... (cached) true
+checking command to parse arm-android-eabi-nm output from /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc object... yes
+checking for unistd.h... yes
+checking for dlfcn.h... failed
+checking for dlfcn.h... yes
+checking for objdir... .libs
+yes
+checking for objdir... .libs
+checking if /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -fno-rtti -fno-exceptions... checking if /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -fno-rtti -fno-exceptions... no
+checking for /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc option to produce PIC... -fPIC -DPIC
+checking if /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc PIC flag -fPIC -DPIC works... yes
+checking if /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc static flag -static works... no
+checking for /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc option to produce PIC... -fPIC -DPIC
+checking if /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc PIC flag -fPIC -DPIC works... yes
+checking if /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc static flag -static works... yes
+checking if /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -c -o file.o... yes
+checking if /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -c -o file.o... (cached) yes
+checking whether the /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc linker (/gcc-for-arm/arm-toolchain/bin/../lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin/ld) supports shared libraries... yes
+checking if /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -c -o file.o... yes
+checking whether -lc should be explicitly linked in... no
+checking dynamic linker characteristics... no
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -c -o file.o... (cached) yes
+checking whether the /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc linker (/gcc-for-arm/arm-toolchain/bin/../lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin/ld) supports shared libraries... yes
+checking if libtool supports shared libraries... no
+checking whether to build shared libraries... no
+checking whether to build static libraries... yes
+checking how to run the C preprocessor... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-cpp
+yes
+checking whether -lc should be explicitly linked in... no
+checking dynamic linker characteristics... checking for stdlib.h... (cached) yes
+no
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... no
+checking whether to build shared libraries... no
+checking whether to build static libraries... yes
+checking for unistd.h... (cached) yes
+checking unwind.h usability... checking for getpagesize... no
+checking for working mmap... no
+checking for memcpy... yes
+checking unwind.h presence... yes
+checking for unwind.h... yes
+checking for _Unwind_Backtrace... yes
+checking for strerror... yes
+checking for -funwind-tables option... yes
+checking for unistd.h... (cached) yes
+yes
+checking for -frandom-seed=string option... yes
+configure: updating cache ./config.cache
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -W... configure: creating ./config.status
+yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wall... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wwrite-strings... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wstrict-prototypes... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wmissing-prototypes... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wold-style-definition... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wmissing-format-attribute... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wcast-qual... yes
+checking for _Unwind_GetIPInfo... yes
+checking __sync extensions... yes
+checking __atomic extensions... yes
+checking output filetype... elf32
+looking for a compliant stdint.h in stdint.h, checking for uintmax_t... yes
+checking for uintptr_t... yes
+checking for int_least32_t... yes
+checking for int_fast32_t... config.status: creating Makefile
+config.status: executing default-1 commands
+yes
+checking for uint64_t... yes
+checking what to include in gstdint.h... stdint.h (already complete)
+checking sys/mman.h usability... config.status: executing depfiles commands
+config.status: executing libtool commands
+yes
+checking sys/mman.h presence... yes
+checking for sys/mman.h... yes
+checking for mmap... yes
+checking link.h usability... mkdir -p -- ./libdecnumber
+Configuring in ./libdecnumber
+yes
+checking link.h presence... yes
+checking for link.h... yes
+checking for dl_iterate_phdr... no
+checking for fcntl... yes
+checking whether strnlen is declared... configure: creating cache ./config.cache
+checking whether make sets $(MAKE)... yes
+checking for arm-android-eabi-gcc... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc
+yes
+checking for getexecname... checking for C compiler default output file name... a.out
+checking whether the C compiler works... yes
+checking whether we are cross compiling... yes
+checking for suffix of executables... no
+checking whether tests can run... no
+
+checking for suffix of object files... configure: updating cache ./config.cache
+o
+checking whether we are using the GNU C compiler... configure: creating ./config.status
+yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc accepts -g... yes
+checking for /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc option to accept ISO C89... none needed
+checking for arm-android-eabi-ranlib... true
+checking for aclocal... no
+checking for autoconf... no
+checking for autoheader... no
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -W... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wall... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wwrite-strings... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wstrict-prototypes... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wmissing-prototypes... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wold-style-definition... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wmissing-format-attribute... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -Wcast-qual... yes
+checking whether /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc supports -pedantic -Wlong-long... yes
+checking how to run the C preprocessor... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-cpp
+checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+config.status: creating Makefile
+checking for string.h... config.status: creating backtrace-supported.h
+config.status: creating config.h
+config.status: executing libtool commands
+yes
+checking for memory.h... config.status: executing gstdint.h commands
+config.status: executing default commands
+yes
+checking for strings.h... yes
+checking for inttypes.h... make[2]: Entering directory '/gcc-for-arm/gcc-6.2.0/build/libiberty'
+if [ x"-fPIC" != x ] && [ ! -d pic ]; then \
+  mkdir pic; \
+else true; fi
+touch stamp-picdir
+yes
+if [ x"" != x ] && [ ! -d noasan ]; then \
+  mkdir noasan; \
+else true; fi
+touch stamp-noasandir
+checking for stdint.h... if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/dwarfnames.c -o pic/dwarfnames.o; \
+else true; fi
+yes
+checking for unistd.h... yes
+checking ctype.h usability... yes
+checking ctype.h presence... yes
+checking for ctype.h... yes
+checking stddef.h usability... if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/dwarfnames.c -o noasan/dwarfnames.o; \
+else true; fi
+yes
+checking stddef.h presence... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/dwarfnames.c -o dwarfnames.o
+yes
+checking for stddef.h... yes
+checking for string.h... (cached) yes
+checking stdio.h usability... yes
+checking stdio.h presence... yes
+checking for stdio.h... yes
+looking for a compliant stdint.h in stdint.h, checking for uintmax_t... yes
+checking for uintptr_t... if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/dyn-string.c -o pic/dyn-string.o; \
+else true; fi
+yes
+checking for int_least32_t... yes
+checking for int_fast32_t... if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/dyn-string.c -o noasan/dyn-string.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/dyn-string.c -o dyn-string.o
+yes
+checking for uint64_t... if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/fdmatch.c -o pic/fdmatch.o; \
+else true; fi
+yes
+checking what to include in gstdint.h... stdint.h (already complete)
+checking for an ANSI C-conforming const... yes
+checking for off_t... if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/fdmatch.c -o noasan/fdmatch.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/fdmatch.c -o fdmatch.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/fibheap.c -o pic/fibheap.o; \
+else true; fi
+yes
+checking size of int... if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/fibheap.c -o noasan/fibheap.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/fibheap.c -o fibheap.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/filename_cmp.c -o pic/filename_cmp.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/filename_cmp.c -o noasan/filename_cmp.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/filename_cmp.c -o filename_cmp.o
+4
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/floatformat.c -o pic/floatformat.o; \
+else true; fi
+checking size of long... if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/floatformat.c -o noasan/floatformat.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/floatformat.c -o floatformat.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/fnmatch.c -o pic/fnmatch.o; \
+else true; fi
+4
+checking for ANSI C header files... (cached) yes
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/fnmatch.c -o noasan/fnmatch.o; \
+else true; fi
+arm-android-eabi
+checking target system type... /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/fnmatch.c -o fnmatch.o
+arm-android-eabi
+checking for decimal floating point... [91mconfigure: WARNING: decimal float is not supported for this target, ignored
+[0mdpd
+checking whether byte ordering is bigendian... if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/fopen_unlocked.c -o pic/fopen_unlocked.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/fopen_unlocked.c -o noasan/fopen_unlocked.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/fopen_unlocked.c -o fopen_unlocked.o
+no
+configure: updating cache ./config.cache
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/getopt.c -o pic/getopt.o; \
+else true; fi
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating config.h
+config.status: executing gstdint.h commands
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/getopt.c -o noasan/getopt.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/getopt.c -o getopt.o
+make[2]: Entering directory '/gcc-for-arm/gcc-6.2.0/build/build-x86_64-linux-gnu/libiberty'
+if [ x"" != x ] && [ ! -d pic ]; then \
+  mkdir pic; \
+else true; fi
+touch stamp-picdir
+if [ x"" != x ] && [ ! -d noasan ]; then \
+  mkdir noasan; \
+else true; fi
+touch stamp-noasandir
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/dwarfnames.c -o pic/dwarfnames.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/dwarfnames.c -o noasan/dwarfnames.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/dwarfnames.c -o dwarfnames.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/dyn-string.c -o pic/dyn-string.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/dyn-string.c -o noasan/dyn-string.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/dyn-string.c -o dyn-string.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/getopt1.c -o pic/getopt1.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/fdmatch.c -o pic/fdmatch.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/fdmatch.c -o noasan/fdmatch.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/fdmatch.c -o fdmatch.o
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/getopt1.c -o noasan/getopt1.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/getopt1.c -o getopt1.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/fibheap.c -o pic/fibheap.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/fibheap.c -o noasan/fibheap.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/fibheap.c -o fibheap.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/getpwd.c -o pic/getpwd.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/filename_cmp.c -o pic/filename_cmp.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/filename_cmp.c -o noasan/filename_cmp.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/filename_cmp.c -o filename_cmp.o
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/getpwd.c -o noasan/getpwd.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/getpwd.c -o getpwd.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/floatformat.c -o pic/floatformat.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/floatformat.c -o noasan/floatformat.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/floatformat.c -o floatformat.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/getruntime.c -o pic/getruntime.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/fnmatch.c -o pic/fnmatch.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/fnmatch.c -o noasan/fnmatch.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/fnmatch.c -o fnmatch.o
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/getruntime.c -o noasan/getruntime.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/getruntime.c -o getruntime.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/fopen_unlocked.c -o pic/fopen_unlocked.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/fopen_unlocked.c -o noasan/fopen_unlocked.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/fopen_unlocked.c -o fopen_unlocked.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/getopt.c -o pic/getopt.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/getopt.c -o noasan/getopt.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/getopt.c -o getopt.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/hashtab.c -o pic/hashtab.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/getopt1.c -o pic/getopt1.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/getopt1.c -o noasan/getopt1.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/getopt1.c -o getopt1.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/getpwd.c -o pic/getpwd.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/getpwd.c -o noasan/getpwd.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/getpwd.c -o getpwd.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/getruntime.c -o pic/getruntime.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/getruntime.c -o noasan/getruntime.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/getruntime.c -o getruntime.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/hashtab.c -o pic/hashtab.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/hashtab.c -o noasan/hashtab.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/hashtab.c -o hashtab.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/hex.c -o pic/hex.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/hex.c -o noasan/hex.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/hex.c -o hex.o
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/hashtab.c -o noasan/hashtab.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/hashtab.c -o hashtab.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/lbasename.c -o pic/lbasename.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/lbasename.c -o noasan/lbasename.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/lbasename.c -o lbasename.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/lrealpath.c -o pic/lrealpath.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/lrealpath.c -o noasan/lrealpath.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/lrealpath.c -o lrealpath.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/make-relative-prefix.c -o pic/make-relative-prefix.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/make-relative-prefix.c -o noasan/make-relative-prefix.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/make-relative-prefix.c -o make-relative-prefix.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/make-temp-file.c -o pic/make-temp-file.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/make-temp-file.c -o noasan/make-temp-file.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/make-temp-file.c -o make-temp-file.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/hex.c -o pic/hex.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/objalloc.c -o pic/objalloc.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/objalloc.c -o noasan/objalloc.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/objalloc.c -o objalloc.o
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/hex.c -o noasan/hex.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/hex.c -o hex.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/obstack.c -o pic/obstack.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/obstack.c -o noasan/obstack.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/obstack.c -o obstack.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/lbasename.c -o pic/lbasename.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/lbasename.c -o noasan/lbasename.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/partition.c -o pic/partition.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/partition.c -o noasan/partition.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/lbasename.c -o lbasename.o
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/partition.c -o partition.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/pexecute.c -o pic/pexecute.o; \
+else true; fi
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/lrealpath.c -o pic/lrealpath.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/pexecute.c -o noasan/pexecute.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/pexecute.c -o pexecute.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/physmem.c -o pic/physmem.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/physmem.c -o noasan/physmem.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/physmem.c -o physmem.o
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/lrealpath.c -o noasan/lrealpath.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/lrealpath.c -o lrealpath.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/pex-common.c -o pic/pex-common.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/pex-common.c -o noasan/pex-common.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/pex-common.c -o pex-common.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/make-relative-prefix.c -o pic/make-relative-prefix.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/pex-one.c -o pic/pex-one.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/pex-one.c -o noasan/pex-one.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/pex-one.c -o pex-one.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/pex-unix.c -o pic/pex-unix.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/pex-unix.c -o noasan/pex-unix.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/pex-unix.c -o pex-unix.o
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/make-relative-prefix.c -o noasan/make-relative-prefix.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/make-relative-prefix.c -o make-relative-prefix.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/vprintf-support.c -o pic/vprintf-support.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/vprintf-support.c -o noasan/vprintf-support.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/vprintf-support.c -o vprintf-support.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/safe-ctype.c -o pic/safe-ctype.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/safe-ctype.c -o noasan/safe-ctype.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/safe-ctype.c -o safe-ctype.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/simple-object.c -o pic/simple-object.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/simple-object.c -o noasan/simple-object.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/simple-object.c -o simple-object.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/make-temp-file.c -o pic/make-temp-file.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/simple-object-coff.c -o pic/simple-object-coff.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/simple-object-coff.c -o noasan/simple-object-coff.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/simple-object-coff.c -o simple-object-coff.o
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/make-temp-file.c -o noasan/make-temp-file.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/make-temp-file.c -o make-temp-file.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/simple-object-elf.c -o pic/simple-object-elf.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/simple-object-elf.c -o noasan/simple-object-elf.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/simple-object-elf.c -o simple-object-elf.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/objalloc.c -o pic/objalloc.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/simple-object-mach-o.c -o pic/simple-object-mach-o.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/simple-object-mach-o.c -o noasan/simple-object-mach-o.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/simple-object-mach-o.c -o simple-object-mach-o.o
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/objalloc.c -o noasan/objalloc.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/objalloc.c -o objalloc.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/simple-object-xcoff.c -o pic/simple-object-xcoff.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/simple-object-xcoff.c -o noasan/simple-object-xcoff.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/simple-object-xcoff.c -o simple-object-xcoff.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/obstack.c -o pic/obstack.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/sort.c -o pic/sort.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/sort.c -o noasan/sort.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/sort.c -o sort.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/spaces.c -o pic/spaces.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/spaces.c -o noasan/spaces.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/spaces.c -o spaces.o
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/obstack.c -o noasan/obstack.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/obstack.c -o obstack.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/splay-tree.c -o pic/splay-tree.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/splay-tree.c -o noasan/splay-tree.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/splay-tree.c -o splay-tree.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/stack-limit.c -o pic/stack-limit.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/stack-limit.c -o noasan/stack-limit.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/stack-limit.c -o stack-limit.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/partition.c -o pic/partition.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/strerror.c -o pic/strerror.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/strerror.c -o noasan/strerror.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/strerror.c -o strerror.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/strsignal.c -o pic/strsignal.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/strsignal.c -o noasan/strsignal.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/strsignal.c -o strsignal.o
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/partition.c -o noasan/partition.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/partition.c -o partition.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/timeval-utils.c -o pic/timeval-utils.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/timeval-utils.c -o noasan/timeval-utils.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/timeval-utils.c -o timeval-utils.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/pexecute.c -o pic/pexecute.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/unlink-if-ordinary.c -o pic/unlink-if-ordinary.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/unlink-if-ordinary.c -o noasan/unlink-if-ordinary.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/unlink-if-ordinary.c -o unlink-if-ordinary.o
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/pexecute.c -o noasan/pexecute.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/pexecute.c -o pexecute.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/xasprintf.c -o pic/xasprintf.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/xasprintf.c -o noasan/xasprintf.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/xasprintf.c -o xasprintf.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/xatexit.c -o pic/xatexit.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/xatexit.c -o noasan/xatexit.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/xatexit.c -o xatexit.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/physmem.c -o pic/physmem.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/xexit.c -o pic/xexit.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/xexit.c -o noasan/xexit.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/xexit.c -o xexit.o
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/physmem.c -o noasan/physmem.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/physmem.c -o physmem.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/xmalloc.c -o pic/xmalloc.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/xmalloc.c -o noasan/xmalloc.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/xmalloc.c -o xmalloc.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/pex-common.c -o pic/pex-common.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/xmemdup.c -o pic/xmemdup.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/xmemdup.c -o noasan/xmemdup.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/xmemdup.c -o xmemdup.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/xstrdup.c -o pic/xstrdup.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/xstrdup.c -o noasan/xstrdup.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/xstrdup.c -o xstrdup.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/xstrerror.c -o pic/xstrerror.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/xstrerror.c -o noasan/xstrerror.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/xstrerror.c -o xstrerror.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/xstrndup.c -o pic/xstrndup.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/xstrndup.c -o noasan/xstrndup.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/xstrndup.c -o xstrndup.o
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/pex-common.c -o noasan/pex-common.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/pex-common.c -o pex-common.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/xvasprintf.c -o pic/xvasprintf.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/xvasprintf.c -o noasan/xvasprintf.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/xvasprintf.c -o xvasprintf.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/setproctitle.c -o pic/setproctitle.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/setproctitle.c -o noasan/setproctitle.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/setproctitle.c -o setproctitle.o
+echo ./regex.o ./cplus-dem.o ./cp-demangle.o ./md5.o ./sha1.o ./alloca.o ./argv.o ./choose-temp.o ./concat.o ./cp-demint.o ./crc32.o ./d-demangle.o ./dwarfnames.o ./dyn-string.o ./fdmatch.o ./fibheap.o ./filename_cmp.o ./floatformat.o ./fnmatch.o ./fopen_unlocked.o ./getopt.o ./getopt1.o ./getpwd.o ./getruntime.o ./hashtab.o ./hex.o ./lbasename.o ./lrealpath.o ./make-relative-prefix.o ./make-temp-file.o ./objalloc.o ./obstack.o ./partition.o ./pexecute.o ./physmem.o ./pex-common.o ./pex-one.o ./pex-unix.o ./vprintf-support.o ./safe-ctype.o ./simple-object.o ./simple-object-coff.o ./simple-object-elf.o ./simple-object-mach-o.o ./simple-object-xcoff.o ./sort.o ./spaces.o ./splay-tree.o ./stack-limit.o ./strerror.o ./strsignal.o ./timeval-utils.o ./unlink-if-ordinary.o ./xasprintf.o ./xatexit.o ./xexit.o ./xmalloc.o ./xmemdup.o ./xstrdup.o ./xstrerror.o ./xstrndup.o ./xvasprintf.o > required-list
+make[3]: Entering directory '/gcc-for-arm/gcc-6.2.0/build/build-x86_64-linux-gnu/libiberty/testsuite'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/gcc-for-arm/gcc-6.2.0/build/build-x86_64-linux-gnu/libiberty/testsuite'
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/regex.c -o pic/regex.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/regex.c -o noasan/regex.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/regex.c -o regex.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/pex-one.c -o pic/pex-one.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/pex-one.c -o noasan/pex-one.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/pex-one.c -o pex-one.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/pex-unix.c -o pic/pex-unix.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/pex-unix.c -o noasan/pex-unix.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/pex-unix.c -o pex-unix.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/cplus-dem.c -o pic/cplus-dem.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/cplus-dem.c -o noasan/cplus-dem.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/cplus-dem.c -o cplus-dem.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/vprintf-support.c -o pic/vprintf-support.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/vprintf-support.c -o noasan/vprintf-support.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/vprintf-support.c -o vprintf-support.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/safe-ctype.c -o pic/safe-ctype.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/safe-ctype.c -o noasan/safe-ctype.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/safe-ctype.c -o safe-ctype.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/cp-demangle.c -o pic/cp-demangle.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/cp-demangle.c -o noasan/cp-demangle.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/cp-demangle.c -o cp-demangle.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/simple-object.c -o pic/simple-object.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/simple-object.c -o noasan/simple-object.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/simple-object.c -o simple-object.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/md5.c -o pic/md5.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/md5.c -o noasan/md5.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/md5.c -o md5.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/simple-object-coff.c -o pic/simple-object-coff.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/sha1.c -o pic/sha1.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/sha1.c -o noasan/sha1.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/sha1.c -o sha1.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/alloca.c -o pic/alloca.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/alloca.c -o noasan/alloca.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/alloca.c -o alloca.o
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/simple-object-coff.c -o noasan/simple-object-coff.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/simple-object-coff.c -o simple-object-coff.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/argv.c -o pic/argv.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/argv.c -o noasan/argv.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/argv.c -o argv.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/choose-temp.c -o pic/choose-temp.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/choose-temp.c -o noasan/choose-temp.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/choose-temp.c -o choose-temp.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/concat.c -o pic/concat.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/concat.c -o noasan/concat.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/concat.c -o concat.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/cp-demint.c -o pic/cp-demint.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/cp-demint.c -o noasan/cp-demint.o; \
+else true; fi
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/simple-object-elf.c -o pic/simple-object-elf.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/cp-demint.c -o cp-demint.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/crc32.c -o pic/crc32.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/crc32.c -o noasan/crc32.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/crc32.c -o crc32.o
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE  ../../../libiberty/d-demangle.c -o pic/d-demangle.o; \
+else true; fi
+if [ x"" != x ]; then \
+  gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE   ../../../libiberty/d-demangle.c -o noasan/d-demangle.o; \
+else true; fi
+gcc -c -DHAVE_CONFIG_H   -I. -I../../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../../libiberty/d-demangle.c -o d-demangle.o
+rm -f ./libiberty.a pic/./libiberty.a noasan/./libiberty.a
+ar rc ./libiberty.a \
+  ./regex.o ./cplus-dem.o ./cp-demangle.o ./md5.o ./sha1.o ./alloca.o ./argv.o ./choose-temp.o ./concat.o ./cp-demint.o ./crc32.o ./d-demangle.o ./dwarfnames.o ./dyn-string.o ./fdmatch.o ./fibheap.o ./filename_cmp.o ./floatformat.o ./fnmatch.o ./fopen_unlocked.o ./getopt.o ./getopt1.o ./getpwd.o ./getruntime.o ./hashtab.o ./hex.o ./lbasename.o ./lrealpath.o ./make-relative-prefix.o ./make-temp-file.o ./objalloc.o ./obstack.o ./partition.o ./pexecute.o ./physmem.o ./pex-common.o ./pex-one.o ./pex-unix.o ./vprintf-support.o ./safe-ctype.o ./simple-object.o ./simple-object-coff.o ./simple-object-elf.o ./simple-object-mach-o.o ./simple-object-xcoff.o ./sort.o ./spaces.o ./splay-tree.o ./stack-limit.o ./strerror.o ./strsignal.o ./timeval-utils.o ./unlink-if-ordinary.o ./xasprintf.o ./xatexit.o ./xexit.o ./xmalloc.o ./xmemdup.o ./xstrdup.o ./xstrerror.o ./xstrndup.o ./xvasprintf.o  ./setproctitle.o
+ranlib ./libiberty.a
+if [ x"" != x ]; then \
+  cd pic; \
+  ar rc ./libiberty.a \
+    ./regex.o ./cplus-dem.o ./cp-demangle.o ./md5.o ./sha1.o ./alloca.o ./argv.o ./choose-temp.o ./concat.o ./cp-demint.o ./crc32.o ./d-demangle.o ./dwarfnames.o ./dyn-string.o ./fdmatch.o ./fibheap.o ./filename_cmp.o ./floatformat.o ./fnmatch.o ./fopen_unlocked.o ./getopt.o ./getopt1.o ./getpwd.o ./getruntime.o ./hashtab.o ./hex.o ./lbasename.o ./lrealpath.o ./make-relative-prefix.o ./make-temp-file.o ./objalloc.o ./obstack.o ./partition.o ./pexecute.o ./physmem.o ./pex-common.o ./pex-one.o ./pex-unix.o ./vprintf-support.o ./safe-ctype.o ./simple-object.o ./simple-object-coff.o ./simple-object-elf.o ./simple-object-mach-o.o ./simple-object-xcoff.o ./sort.o ./spaces.o ./splay-tree.o ./stack-limit.o ./strerror.o ./strsignal.o ./timeval-utils.o ./unlink-if-ordinary.o ./xasprintf.o ./xatexit.o ./xexit.o ./xmalloc.o ./xmemdup.o ./xstrdup.o ./xstrerror.o ./xstrndup.o ./xvasprintf.o  ./setproctitle.o; \
+  ranlib ./libiberty.a; \
+  cd ..; \
+else true; fi; \
+if [ x"" != x ]; then \
+  cd noasan; \
+  ar rc ./libiberty.a \
+    ./regex.o ./cplus-dem.o ./cp-demangle.o ./md5.o ./sha1.o ./alloca.o ./argv.o ./choose-temp.o ./concat.o ./cp-demint.o ./crc32.o ./d-demangle.o ./dwarfnames.o ./dyn-string.o ./fdmatch.o ./fibheap.o ./filename_cmp.o ./floatformat.o ./fnmatch.o ./fopen_unlocked.o ./getopt.o ./getopt1.o ./getpwd.o ./getruntime.o ./hashtab.o ./hex.o ./lbasename.o ./lrealpath.o ./make-relative-prefix.o ./make-temp-file.o ./objalloc.o ./obstack.o ./partition.o ./pexecute.o ./physmem.o ./pex-common.o ./pex-one.o ./pex-unix.o ./vprintf-support.o ./safe-ctype.o ./simple-object.o ./simple-object-coff.o ./simple-object-elf.o ./simple-object-mach-o.o ./simple-object-xcoff.o ./sort.o ./spaces.o ./splay-tree.o ./stack-limit.o ./strerror.o ./strsignal.o ./timeval-utils.o ./unlink-if-ordinary.o ./xasprintf.o ./xatexit.o ./xexit.o ./xmalloc.o ./xmemdup.o ./xstrdup.o ./xstrerror.o ./xstrndup.o ./xvasprintf.o  ./setproctitle.o; \
+  ranlib ./libiberty.a; \
+  cd ..; \
+else true; fi
+make[2]: Leaving directory '/gcc-for-arm/gcc-6.2.0/build/build-x86_64-linux-gnu/libiberty'
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/simple-object-mach-o.c -o pic/simple-object-mach-o.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/simple-object-elf.c -o noasan/simple-object-elf.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/simple-object-elf.c -o simple-object-elf.o
+make[2]: Entering directory '/gcc-for-arm/gcc-6.2.0/build/zlib'
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"zlib\" -DVERSION=\"1.1.4\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DLT_OBJDIR=\".libs/\" -DHAVE_STDLIB_H=1 -DHAVE_UNISTD_H=1 -DHAVE_MEMCPY=1 -DHAVE_STRERROR=1 -DHAVE_UNISTD_H=1 -I. -I../../zlib      -g -O2 -c -o libz_a-adler32.o `test -f 'adler32.c' || echo '../../zlib/'`adler32.c
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/simple-object-mach-o.c -o noasan/simple-object-mach-o.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/simple-object-mach-o.c -o simple-object-mach-o.o
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"zlib\" -DVERSION=\"1.1.4\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DLT_OBJDIR=\".libs/\" -DHAVE_STDLIB_H=1 -DHAVE_UNISTD_H=1 -DHAVE_MEMCPY=1 -DHAVE_STRERROR=1 -DHAVE_UNISTD_H=1 -I. -I../../zlib      -g -O2 -c -o libz_a-compress.o `test -f 'compress.c' || echo '../../zlib/'`compress.c
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"zlib\" -DVERSION=\"1.1.4\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DLT_OBJDIR=\".libs/\" -DHAVE_STDLIB_H=1 -DHAVE_UNISTD_H=1 -DHAVE_MEMCPY=1 -DHAVE_STRERROR=1 -DHAVE_UNISTD_H=1 -I. -I../../zlib      -g -O2 -c -o libz_a-crc32.o `test -f 'crc32.c' || echo '../../zlib/'`crc32.c
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"zlib\" -DVERSION=\"1.1.4\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DLT_OBJDIR=\".libs/\" -DHAVE_STDLIB_H=1 -DHAVE_UNISTD_H=1 -DHAVE_MEMCPY=1 -DHAVE_STRERROR=1 -DHAVE_UNISTD_H=1 -I. -I../../zlib      -g -O2 -c -o libz_a-deflate.o `test -f 'deflate.c' || echo '../../zlib/'`deflate.c
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/simple-object-xcoff.c -o pic/simple-object-xcoff.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/simple-object-xcoff.c -o noasan/simple-object-xcoff.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/simple-object-xcoff.c -o simple-object-xcoff.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/sort.c -o pic/sort.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/sort.c -o noasan/sort.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/sort.c -o sort.o
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"zlib\" -DVERSION=\"1.1.4\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DLT_OBJDIR=\".libs/\" -DHAVE_STDLIB_H=1 -DHAVE_UNISTD_H=1 -DHAVE_MEMCPY=1 -DHAVE_STRERROR=1 -DHAVE_UNISTD_H=1 -I. -I../../zlib      -g -O2 -c -o libz_a-gzread.o `test -f 'gzread.c' || echo '../../zlib/'`gzread.c
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/spaces.c -o pic/spaces.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/spaces.c -o noasan/spaces.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/spaces.c -o spaces.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/splay-tree.c -o pic/splay-tree.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"zlib\" -DVERSION=\"1.1.4\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DLT_OBJDIR=\".libs/\" -DHAVE_STDLIB_H=1 -DHAVE_UNISTD_H=1 -DHAVE_MEMCPY=1 -DHAVE_STRERROR=1 -DHAVE_UNISTD_H=1 -I. -I../../zlib      -g -O2 -c -o libz_a-gzclose.o `test -f 'gzclose.c' || echo '../../zlib/'`gzclose.c
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"zlib\" -DVERSION=\"1.1.4\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DLT_OBJDIR=\".libs/\" -DHAVE_STDLIB_H=1 -DHAVE_UNISTD_H=1 -DHAVE_MEMCPY=1 -DHAVE_STRERROR=1 -DHAVE_UNISTD_H=1 -I. -I../../zlib      -g -O2 -c -o libz_a-gzwrite.o `test -f 'gzwrite.c' || echo '../../zlib/'`gzwrite.c
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/splay-tree.c -o noasan/splay-tree.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/splay-tree.c -o splay-tree.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/stack-limit.c -o pic/stack-limit.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"zlib\" -DVERSION=\"1.1.4\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DLT_OBJDIR=\".libs/\" -DHAVE_STDLIB_H=1 -DHAVE_UNISTD_H=1 -DHAVE_MEMCPY=1 -DHAVE_STRERROR=1 -DHAVE_UNISTD_H=1 -I. -I../../zlib      -g -O2 -c -o libz_a-gzlib.o `test -f 'gzlib.c' || echo '../../zlib/'`gzlib.c
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/stack-limit.c -o noasan/stack-limit.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/stack-limit.c -o stack-limit.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/strerror.c -o pic/strerror.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/strerror.c -o noasan/strerror.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/strerror.c -o strerror.o
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"zlib\" -DVERSION=\"1.1.4\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DLT_OBJDIR=\".libs/\" -DHAVE_STDLIB_H=1 -DHAVE_UNISTD_H=1 -DHAVE_MEMCPY=1 -DHAVE_STRERROR=1 -DHAVE_UNISTD_H=1 -I. -I../../zlib      -g -O2 -c -o libz_a-infback.o `test -f 'infback.c' || echo '../../zlib/'`infback.c
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/strsignal.c -o pic/strsignal.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/strsignal.c -o noasan/strsignal.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/strsignal.c -o strsignal.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/timeval-utils.c -o pic/timeval-utils.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/timeval-utils.c -o noasan/timeval-utils.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/timeval-utils.c -o timeval-utils.o
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"zlib\" -DVERSION=\"1.1.4\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DLT_OBJDIR=\".libs/\" -DHAVE_STDLIB_H=1 -DHAVE_UNISTD_H=1 -DHAVE_MEMCPY=1 -DHAVE_STRERROR=1 -DHAVE_UNISTD_H=1 -I. -I../../zlib      -g -O2 -c -o libz_a-inffast.o `test -f 'inffast.c' || echo '../../zlib/'`inffast.c
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/unlink-if-ordinary.c -o pic/unlink-if-ordinary.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/unlink-if-ordinary.c -o noasan/unlink-if-ordinary.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/unlink-if-ordinary.c -o unlink-if-ordinary.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/xasprintf.c -o pic/xasprintf.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"zlib\" -DVERSION=\"1.1.4\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DLT_OBJDIR=\".libs/\" -DHAVE_STDLIB_H=1 -DHAVE_UNISTD_H=1 -DHAVE_MEMCPY=1 -DHAVE_STRERROR=1 -DHAVE_UNISTD_H=1 -I. -I../../zlib      -g -O2 -c -o libz_a-inflate.o `test -f 'inflate.c' || echo '../../zlib/'`inflate.c
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/xasprintf.c -o noasan/xasprintf.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/xasprintf.c -o xasprintf.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/xatexit.c -o pic/xatexit.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/xatexit.c -o noasan/xatexit.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/xatexit.c -o xatexit.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/xexit.c -o pic/xexit.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/xexit.c -o noasan/xexit.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/xexit.c -o xexit.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/xmalloc.c -o pic/xmalloc.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/xmalloc.c -o noasan/xmalloc.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/xmalloc.c -o xmalloc.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/xmemdup.c -o pic/xmemdup.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/xmemdup.c -o noasan/xmemdup.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/xmemdup.c -o xmemdup.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/xstrdup.c -o pic/xstrdup.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/xstrdup.c -o noasan/xstrdup.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/xstrdup.c -o xstrdup.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/xstrerror.c -o pic/xstrerror.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/xstrerror.c -o noasan/xstrerror.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/xstrerror.c -o xstrerror.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/xstrndup.c -o pic/xstrndup.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/xstrndup.c -o noasan/xstrndup.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/xstrndup.c -o xstrndup.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/xvasprintf.c -o pic/xvasprintf.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/xvasprintf.c -o noasan/xvasprintf.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/xvasprintf.c -o xvasprintf.o
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"zlib\" -DVERSION=\"1.1.4\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DLT_OBJDIR=\".libs/\" -DHAVE_STDLIB_H=1 -DHAVE_UNISTD_H=1 -DHAVE_MEMCPY=1 -DHAVE_STRERROR=1 -DHAVE_UNISTD_H=1 -I. -I../../zlib      -g -O2 -c -o libz_a-inftrees.o `test -f 'inftrees.c' || echo '../../zlib/'`inftrees.c
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/bcmp.c -o pic/bcmp.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/bcmp.c -o noasan/bcmp.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/bcmp.c -o bcmp.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/bcopy.c -o pic/bcopy.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/bcopy.c -o noasan/bcopy.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/bcopy.c -o bcopy.o
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/bzero.c -o pic/bzero.o; \
+else true; fi
+if [ x"" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC  ../../libiberty/bzero.c -o noasan/bzero.o; \
+else true; fi
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE ../../libiberty/bzero.c -o bzero.o
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"zlib\" -DVERSION=\"1.1.4\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DLT_OBJDIR=\".libs/\" -DHAVE_STDLIB_H=1 -DHAVE_UNISTD_H=1 -DHAVE_MEMCPY=1 -DHAVE_STRERROR=1 -DHAVE_UNISTD_H=1 -I. -I../../zlib      -g -O2 -c -o libz_a-trees.o `test -f 'trees.c' || echo '../../zlib/'`trees.c
+if [ x"-fPIC" != x ]; then \
+  /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/getpagesize.c -o pic/getpagesize.o; \
+else true; fi
+[91m../../libiberty/getpagesize.c:64:1: error: redefinition of 'getpagesize'
+ getpagesize (void)
+ ^
+[0m[91mIn file included from ../../libiberty/getpagesize.c:34:0:
+/gcc-for-arm/arm-toolchain/sysroot/usr/include/unistd.h:171:23: note: previous definition of 'getpagesize' was here
+ static __inline__ int getpagesize(void) {
+                       ^
+[0mMakefile:829: recipe for target 'getpagesize.o' failed
+[91mmake[2]: *** [getpagesize.o] Error 1
+[0mmake[2]: Leaving directory '/gcc-for-arm/gcc-6.2.0/build/libiberty'
+Makefile:7458: recipe for target 'all-libiberty' failed
+[91mmake[1]: *** [all-libiberty] Error 2
+[0m[91mmake[1]: *** Waiting for unfinished jobs....
+[0m/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"zlib\" -DVERSION=\"1.1.4\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DLT_OBJDIR=\".libs/\" -DHAVE_STDLIB_H=1 -DHAVE_UNISTD_H=1 -DHAVE_MEMCPY=1 -DHAVE_STRERROR=1 -DHAVE_UNISTD_H=1 -I. -I../../zlib      -g -O2 -c -o libz_a-uncompr.o `test -f 'uncompr.c' || echo '../../zlib/'`uncompr.c
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"zlib\" -DVERSION=\"1.1.4\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DLT_OBJDIR=\".libs/\" -DHAVE_STDLIB_H=1 -DHAVE_UNISTD_H=1 -DHAVE_MEMCPY=1 -DHAVE_STRERROR=1 -DHAVE_UNISTD_H=1 -I. -I../../zlib      -g -O2 -c -o libz_a-zutil.o `test -f 'zutil.c' || echo '../../zlib/'`zutil.c
+true "AR_FLAGS=rc" "CC_FOR_BUILD=gcc" "CFLAGS=-g -O2" "CXXFLAGS=-g -O2" "CFLAGS_FOR_BUILD=" "CFLAGS_FOR_TARGET=-g -O2" "INSTALL=/usr/bin/install -c" "INSTALL_DATA=/usr/bin/install -c -m 644" "INSTALL_PROGRAM=/usr/bin/install -c" "INSTALL_SCRIPT=/usr/bin/install -c" "LDFLAGS=-static-libstdc++ -static-libgcc " "LIBCFLAGS=-g -O2" "LIBCFLAGS_FOR_TARGET=-g -O2" "MAKE=make" "MAKEINFO=/gcc-for-arm/gcc-6.2.0/missing makeinfo --split-size=5000000 --split-size=5000000 " "PICFLAG=" "PICFLAG_FOR_TARGET=" "SHELL=/bin/bash" "EXPECT=expect" "RUNTEST=runtest" "RUNTESTFLAGS=" "exec_prefix=/gcc-for-arm/gcc-build/gcc" "infodir=/gcc-for-arm/gcc-build/gcc/share/info" "libdir=/gcc-for-arm/gcc-build/gcc/lib" "prefix=/gcc-for-arm/gcc-build/gcc" "tooldir=/gcc-for-arm/gcc-build/gcc/arm-android-eabi" "AR=/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-ar" "AS=arm-android-eabi-as" "CC=/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc" "CXX=/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-g++" "LD=/gcc-for-arm/arm-toolchain/bin/../lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin/ld" "LIBCFLAGS=-g -O2" "NM=arm-android-eabi-nm" "PICFLAG=" "RANLIB=true" "DESTDIR=" DO=all multi-do # make
+rm -f libz.a
+/gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-ar cru libz.a libz_a-adler32.o libz_a-compress.o libz_a-crc32.o libz_a-deflate.o libz_a-gzread.o libz_a-gzclose.o libz_a-gzwrite.o libz_a-gzlib.o libz_a-infback.o libz_a-inffast.o libz_a-inflate.o libz_a-inftrees.o libz_a-trees.o libz_a-uncompr.o libz_a-zutil.o 
+true libz.a
+make[2]: Leaving directory '/gcc-for-arm/gcc-6.2.0/build/zlib'
+make[1]: Leaving directory '/gcc-for-arm/gcc-6.2.0/build'
+[91mmake: *** [all] Error 2
+[0mMakefile:873: recipe for target 'all' failed

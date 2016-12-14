@@ -29,11 +29,21 @@ And see if show ARM on file arch
 When i run the script "build.sh" it make everything but not build the GCC, see the error:
 
 ```
-checking host system type... Invalid configuration `none-unknown-linux-androideabi': machine `none-unknown-linux' not recognized
-configure: error: /bin/bash ../../gmp/config.sub none-unknown-linux-androideabi failed
-no
-checking for strerror... make[1]: *** [configure-gmp] Error 1
-Makefile:4539: recipe for target 'configure-gmp' failed
+ /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -c -DHAVE_CONFIG_H -g -O2  -I. -I../../libiberty/../include  -W -Wall -Wwrite-strings -Wc++-compat -Wstrict-prototypes -pedantic  -D_GNU_SOURCE -fPIC ../../libiberty/getpagesize.c -o pic/getpagesize.o; \
+else true; fi
+../../libiberty/getpagesize.c:64:1: error: redefinition of 'getpagesize'
+ getpagesize (void)
+ ^
+In file included from ../../libiberty/getpagesize.c:34:0:
+/gcc-for-arm/arm-toolchain/sysroot/usr/include/unistd.h:171:23: note: previous definition of 'getpagesize' was here
+ static __inline__ int getpagesize(void) {
+                       ^
+Makefile:829: recipe for target 'getpagesize.o' failed
+make[2]: *** [getpagesize.o] Error 1
+make[2]: Leaving directory '/gcc-for-arm/gcc-6.2.0/build/libiberty'
+Makefile:7458: recipe for target 'all-libiberty' failed
+/bin/bash ./libtool --tag=CC   --mode=compile /gcc-for-arm/arm-toolchain/bin/arm-linux-androideabi-gcc -DHAVE_CONFIG_H -I. -I../../libbacktrace  -I ../../libbacktrace/../include -I ../../libbacktrace/../libgcc -I ../libgcc  -funwind-tables -frandom-seed=fileline.lo -W -Wall -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition -Wmissing-format-attribute -Wcast-qual  -g -O2 -c -o fileline.lo ../../libbacktrace/fileline.c
+make[1]: *** [all-libiberty] Error 2
 make[1]: *** Waiting for unfinished jobs....
 ```
 
